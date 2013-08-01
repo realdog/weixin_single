@@ -13,7 +13,7 @@ module.exports.do = function (message, req, res, callback) {
     var event = message.Event;
     var key = message.EventKey;
     var userkey = message.FromUserName;
-    var logInfo = {userkey:xss(message.FromUserName), msgtype: xss(message.MsgType)};
+    var logInfo = {userkey:message.FromUserName, msgtype:message.MsgType};
     logInfo.content = "消息类型:" + event;
     logInfo.content += "\n 键值:" + key;
     userSend.logUserSendContent(logInfo, function(err, result){
