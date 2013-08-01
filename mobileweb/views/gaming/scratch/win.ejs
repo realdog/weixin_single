@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="description" content="微信通 微信营销"/>
+    <link rel="stylesheet" href="<%= resourceDomain %>/css/mobileweb/plugin/alertify/alertify.css" />
+    <link rel="stylesheet" href="<%= resourceDomain %>/css/mobileweb/plugin/alertify/alertify.bootstrap.css" />
+    <script type="text/javascript" src="<%= resourceDomain %>/javascript/mobileweb/plugin/alertify/alertify.min.js"></script>
+
+    <style>
+        .cover{
+            width: 320px;
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .cover img{
+            width: 320px;
+        }
+        #scratchpad,#prize{
+            position: absolute;
+            width: 150px;
+            height: 40px;
+            top: 110px;
+            right: 50px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 20px;
+            line-height: 40px;
+        }
+        .btn-cont{
+            position: absolute;
+            bottom: 3px;
+            right: 3px;
+            display: none;
+        }
+        .content{
+            margin-top: 20px;
+            padding: 0 15px;
+        }
+        .content .desc{
+            font-weight: bold;
+            border-bottom: 1px dashed #000;
+            padding: 12px 0px;
+        }
+        p {
+            margin: 0 0 10px;
+            font-size: 14px;
+        }
+        .loading-mask{
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            background: rgba(0,0,0,0.6);
+            z-index: 100;
+            left: 0px;
+            top: 0px;
+        }
+    </style>
+    <script type="text/javascript">
+        Alertify.dialog.labels.ok = "确定";
+        function loading(canvas,options){
+            this.canvas = canvas;
+            if(options){
+                this.radius = options.radius||12;
+                this.circleLineWidth = options.circleLineWidth||4;
+                this.circleColor = options.circleColor||'lightgray';
+                this.moveArcColor = options.moveArcColor||'gray';
+            }else{
+                this.radius = 12;
+                this.circelLineWidth = 4;
+                this.circleColor = 'lightgray';
+                this.moveArcColor = 'gray';
+            }
+        }
+        loading.prototype = {
+            show:function (){
+                var canvas = this.canvas;
+                if(!canvas.getContext)return;
+                if(canvas.__loading)return;
+                canvas.__loading = this;
+                var ctx = canvas.getContext('2d');
+                var radius = this.radius;
+                var me = this;
+                var rotatorAngle = Math.PI*1.5;
+                var step = Math.PI/6;
+                canvas.loadingInterval = setInterval(function(){
+                    ctx.clearRect(0,0,canvas.width,canvas.height);
+                    var lineWidth = me.circleLineWidth;
+                    var center = {x:canvas.width/2,y:canvas.height/2};
+                    ctx.beginPath();
+                    ctx.lineWidth = lineWidth;
+                    ctx.strokeStyle = me.circleColor;
+                    ctx.arc(center.x,center.y+20,radius,0,Math.PI*2);
+                    ctx.closePath();
+                    ctx.stroke();
+                    //在圆圈上面画小圆
+                    ctx.beginPath();
+                    ctx.strokeStyle = me.moveArcColor;
+                    ctx.arc(center.x,center.y+20,radius,rotatorAngle,rotatorAngle+Math.PI*.45);
+                    ctx.stroke();
+                    rotatorAngle+=step;
+                },100);
+            },
+            hide:function(){
+                var canvas = this.canvas;
+                canvas.__loading = false;
+                if(canvas.loadingInterval){
+                    window.clearInterval(canvas.loadingInterval);
+                }
+                var ctx = canvas.getContext('2d');
+                if(ctx)ctx.clearRect(0,0,canvas.width,canvas.height);
+            }
+        };
+    </script>
+    <title>刮刮卡抽奖页面</title>
+</head>
+
+<body data-role="page" data-aid="6801">
+<div class="loading-mask">
+    <div style="position: absolute;left: 50%; margin-left: -150px;text-align: center;">
+        <canvas id="loading" style="width: 300px;height: 150px;">loading</canvas>
+        <div style="color: white;font-size: 20px;">正在努力加载中...</div>
+    </div>
+</div>
+<script type="text/javascript">
+    var loadingObj = new loading(document.getElementById('loading'),{radius:20,circleLineWidth:8});
+    loadingObj.show();
+</script>
+<div class="cover">
+    <img src="<%= resourceDomain %>/images/mobileweb/gaming/scratch/mobile_bg1.jpg" />
+    <div id="prize"></div>
+    <div id="scratchpad"></div>
+
+    <div class="btn-cont">
+        <a href="/mobileweb/gaming/scratch/showresult?a=<%= a %>&u=<%= u %>&c=<%= code %>" id="opendialog" data-role="button" data-rel="dialog">我要领奖</a>
+    </div>
+
+</div>
+
+<div class="content">
+    <p class="desc">兑奖说明<span style="color: red;">（亲，中奖后请务必点击"我要领奖"输入您的手机号或牢记您的SN码，否则可能无法领奖喔！）</span></p>
+    <p>一等奖：<%= prize.prize1  %>。奖品数量：<%= prize.amount1  %></p>
+    <p>二等奖：<%= prize.prize2  %>。奖品数量：<%= prize.amount3  %></p>
+    <p>三等奖：<%= prize.prize3  %>。奖品数量：<%= prize.amount2  %></p>
+    <p>请点击进入刮奖活动页面</p>
+</div>
+<div style="clear:both;"></div>
+
+
+
+
+
+
+
+<p class="page-url">
+    <a href="<%= provider.url %>" target="_blank" class="page-url-link">此功能由"<%= provider.name %>"平台提供</a>
+</p>
+
+
+
+
+</body>
+<link rel="stylesheet" href="<%= resourceDomain %>/css/mobileweb/common.css" />
+<link rel="stylesheet" href="<%= resourceDomain %>/css/mobileweb/jqm/jquery.mobile-1.2.0.min.css" />
+<script type="text/javascript" src="<%= resourceDomain %>/javascript/mobileweb/jquery/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="<%= resourceDomain %>/javascript/mobileweb/jqm/jquery.mobile-1.2.0.min.js"></script><script type="text/javascript" src="<%= resourceDomain %>/javascript/mobileweb/plugin/wScratchPad.js"></script>
+<script type="text/javascript">
+    window.sncode = "<%= sn %>";
+    window.prize = "<%= prizetype %>";
+    $(function(){
+        var useragent = window.navigator.userAgent.toLowerCase();
+        var statu="enable";
+        $("#scratchpad").wScratchPad({
+            width : 150,
+            height : 40,
+            color : "#a9a9a7",
+            scratchMove : function(){
+                if(statu=="enable"){
+                    statu="diaable";
+
+                    var submitData = {
+                        code:window.sncode,
+                        prize:1,
+                        token:"<%= code %>",
+                        a: <%= a %>
+                    };
+
+
+
+                }
+                $(".btn-cont").fadeIn();
+                if (useragent.indexOf("android 4") > 0) {
+                    if ($("#scratchpad").css("color").indexOf("51") > 0) {
+                        $("#scratchpad").css("color", "rgb(50,50,50)");
+                    } else if($("#scratchpad").css("color").indexOf("50") > 0) {
+                        $("#scratchpad").css("color", "rgb(51,51,51)");
+                    }
+                }
+            }
+        });
+        $("#showresult").live('pageinit', function (event) {
+            $("#sncode").text(sncode);
+            $("#prizetype").text(window.prize);
+
+            $("#save-btn").bind("click",function(){
+                var $btn = $(this);
+                var tel = $("#tel").val();
+                if($btn.parent().hasClass("ui-disabled")) return;
+                if(tel == ''){
+                    $("#inputTip").html("<font color='red'>请输入手机号码:</font>");
+                    return;
+                }
+                var regu =/^[1][0-9]{10}$/;
+                var re = new RegExp(regu);
+                if(!re.test(tel)){
+                    $("#inputTip").html("<font color='red'>请输入正确手机号码:</font>");
+                    return;
+                }
+                var submitData = {
+                    sncode:window.sncode,
+                    tel:tel
+                };
+                $btn.parent().addClass("ui-disabled");
+                $.post('/mobileweb/gaming/scratch/setmobile?a=<%= a %>&u=<%= u %>&c=<%= code %>', submitData,function(data) {
+                    if(!!data.success && (data.success == true)){
+                        Alertify.dialog.alert("提交成功，谢谢您的参与");
+                        $("#showresult").dialog('close');
+                        $(".btn-cont").remove();
+                        return;
+                    } else{
+                        Alertify.dialog.alert("请记好您的获奖SN代码");
+                        $("#showresult").dialog('close');
+                        $btn.parent().removeClass("ui-disabled");
+                    }
+                },"json");
+            });
+        });
+        $("#prize").html("<%= prizetype %>");
+        loadingObj.hide();
+        $(".loading-mask").remove();
+    });
+</script>
+
+</html>

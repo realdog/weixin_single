@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/resource/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/resource/css/admin/admin.css" />
+    <link rel="stylesheet" href="/resource/css/admin/service-module.css" />
+    <script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/resource/bootstrap/js/bootstrap.min.js"></script>
+    <title>商家营销服务模块</title>
+</head>
+
+<body>
+<div class="main-title">
+    <h3>商家营销服务模块</h3>
+</div>
+<div class="tab-header">
+    <span class="tab-title"><i class="icon icon-account"></i>商家营销推广模块</span>
+</div>
+<div class="module-cont fn-clear">
+    <div class="module db-r">
+        <div class="header">
+            <div class="title">
+                <h1>优惠券</h1>
+                <h2>推广模块</h2>
+            </div>
+            <img class="h-img" src="/resource/image/admin/shoper/module-01.jpg" />
+        </div>
+        <div class="desc"><span class="bold">服务模块说明：</span>该模块可为商家定制优惠劵，通过设置活动时间，数量，触发关键词，由网友在线领取。</div>
+        <a href="#coupon-desc" class="detail tangerine" data-toggle="modal">查看详细</a>
+        <!-- 弹出框 -->
+        <div id="coupon-desc" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>优惠券推广模块</h3>
+            </div>
+            <div class="modal-body">
+                <p>设置优惠劵前需要先编辑一条图文消息，提前一天或者当天推送给所有粉丝，告知在某个时间段发某个关键词可以领取什么样的优惠劵。</p>
+                <p>然后进入优惠劵活动设置，设定优惠劵内容、时间、数量、触发关键词和优惠劵已派完后答复网友的话，确定设置后系统会根据设定的数量产生相应的SN码。</p>
+                <p>活动设定后，在规定时间到时，网友发送关键词如“我要优惠”，就会领取到一张优惠劵，优惠劵上面有唯一的一个SN码，网友到店消费时向商家出示SN码，商家根据系统产生的SN码进行比对，确认无误后即可享受优惠。</p>
+                <p>每个网友每次活动只能领取一张优惠劵。</p>
+            </div>
+        </div>
+        <div class="module-btns">
+            <a class="btn btn-success disabled">套餐服务</a>
+            <a href="./add-activity?type=3" class="btn btn-primary">添加活动</a>
+        </div>
+    </div>
+    <div class="module db-r">
+        <div class="header">
+            <div class="title">
+                <h1>幸运大转盘</h1>
+                <h2>推广模块</h2>
+            </div>
+            <img class="h-img" src="/resource/image/admin/shoper/module-02.jpg" />
+        </div>
+        <div class="desc"><span class="bold">服务模块说明：</span>该模块可为商家提供转盘抽奖服务，商家通过设置活动时间，预计参加抽奖人数，相应奖项和触发关键词，由网友在线参与抽奖。</div>
+        <a href="#luckydraw-desc" class="detail tangerine" data-toggle="modal">查看详细</a>
+        <!-- 弹出框 -->
+        <div id="luckydraw-desc" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>抽奖推广模块</h3>
+            </div>
+            <div class="modal-body">
+                <p>设置抽奖前需要先编辑一条图文消息，提前一天或者当天推送给所有粉丝，告知在某个时间段发某个关键词可以参与抽奖。</p>
+                <p>然后进入抽奖设置，设定活动时间、中奖几率、触发关键词和相应的奖品，确定设置后系统会根据设定的中奖几率产生相应的SN码。</p>
+                <p>活动设定后，在规定时间到时，网友发送关键词如“我要抽奖”，就可以参与三次转盘，中奖后会得到一个SN码，网友到店时向商家出示SN码，商家根据系统产生的SN码进行比对，确认无误后即可兑换奖品。</p>
+                <p>每个网友每次活动只能领取一张优惠劵。</p>
+            </div>
+        </div>
+        <div class="module-btns">
+            <a class="btn btn-success disabled">套餐服务</a>
+            <a class="btn btn-primary" href="./add-activity?type=5">添加活动</a>
+        </div>
+    </div>
+    <div class="module">
+        <div class="header">
+            <div class="title">
+                <h1>刮刮卡抽奖</h1>
+                <h2>推广模块</h2>
+            </div>
+            <img class="h-img" src="/resource/image/admin/shoper/module-07.jpg" />
+        </div>
+        <div class="desc"><span class="bold">服务模块说明：</span>该模块可为商家提供刮刮卡抽奖服务，全网第一个可以通过微信玩刮刮卡，用户通过手机屏幕进行刮奖的游戏！</div>
+        <a href="#question-desc" class="detail tangerine" data-toggle="modal">查看详细</a>
+        <!-- 弹出框 -->
+        <div id="question-desc" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>刮刮卡抽奖推广模块</h3>
+            </div>
+            <div class="modal-body">
+                <p>设置抽奖前需要先编辑一条图文消息，提前一天或者当天推送给所有粉丝，告知在某个时间段发某个关键词可以参与刮奖。</p>
+                <p>然后进入抽奖设置，设定活动时间、中奖几率、触发关键词和相应的奖品，确定设置后系统会根据设定的中奖几率产生相应的SN码。</p>
+                <p>活动设定后，在规定时间到时，网友发送关键词如“我要抽奖”，就会发送给他一张刮刮卡，粉丝通过屏幕进行刮奖，中奖后会得到一个SN码，网友到店时向商家出示SN码，商家根据系统产生的SN码进行比对，确认无误后即可兑换奖品。</p>
+                <p>每个网友每次活动只能参与一次刮奖。</p>
+            </div>
+        </div>
+        <div class="module-btns">
+            <a class="btn btn-success disabled">套餐服务</a>
+            <a class="btn btn-primary" href="./add-activity?type=4">添加活动</a>
+        </div>
+    </div>
+    <div class="module db-t">
+        <div class="header">
+            <div class="title">
+                <h1>用户调研</h1>
+                <h2>模块</h2>
+            </div>
+            <img class="h-img" src="/resource/image/admin/shoper/module-04.jpg" />
+        </div>
+        <div class="desc"><span class="bold">服务模块说明：</span>该模块可为商家提供用户调研的服务，商家通过设置活动时间、调研的问题、参与调研的奖品，进行用户调研。</div>
+        <a href="#survey-desc" class="detail tangerine" data-toggle="modal">查看详细</a>
+        <!-- 弹出框 -->
+        <div id="survey-desc" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>用户调研模块</h3>
+            </div>
+            <div class="modal-body">
+                <p>设置用户调研前需要先编辑一条图文消息，提前一天或者当天推送给所有粉丝，告知在某个时间段发某个关键词可以参与有奖用户调研。</p>
+                <p>然后进入模块设置，设定活动时间、触发关键词、调研问题以及中奖后的奖品。</p>
+                <p>活动开始后，粉丝输入关键词，会推送给他一个用户调研表，粉丝填写完调研表点击提交，就会获得一个SN码，商家根据SN码提供小礼品。</p>
+            </div>
+        </div>
+        <p class="price-cont">价格：<span class="price bold tangerine">￥30</span>(<span class="old-price">￥50</span>)/月</p>
+        <p class="tangerine">新品上线优惠三天</p>
+        <div class="btn-cont">
+
+        </div>
+    </div>
+    <div class="module db-t db-l">
+        <div class="header">
+            <div class="title">
+                <h1>微会员卡</h1>
+                <h2>模块</h2>
+            </div>
+            <img class="h-img" src="/resource/image/admin/shoper/module-mc.png" />
+        </div>
+        <div class="desc"><span class="bold">服务模块说明：</span>该模块为用户提供会员卡的服务，用户通过设置会员卡优惠，快速的将微信粉丝转化为会员，并且得到粉丝的详细资料。</div>
+        <a href="#fans-desc" class="detail tangerine" data-toggle="modal">查看详细</a>
+        <!-- 弹出框 -->
+        <div id="fans-desc" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>微会员卡模块</h3>
+            </div>
+            <div class="modal-body">
+                <p>用户根据自己的需要修改会员卡的样式，制作一个精美的界面，设置自己的LOGO，同时设置详细的会员特权，如成为会员可享受某样商品的半价，或者升级成什么样的套餐，用户设定好触发的关键词。</p>
+                <p>粉丝首次关注账号时，提示粉丝输入相应的关键词以获得会员卡，之后粉丝将看到会员能享受的特权，点击成为会员以后，需要粉丝填写姓名、电话等详细信息，这些信息用户将在后台看到，粉丝点击提交，就获得一张永久的会员卡，有独享的卡号，成为会员。</p>
+            </div>
+        </div>
+        <p class="vip-only">VIP用户尊享服务模块</p>
+        <div class="btn-cont">
+
+
+
+        </div>
+        <img class="vip" src="/resource/image/admin/shoper/vip.png">
+    </div>
+    <div class="module db-t db-l">
+        <div class="header">
+            <div class="title">
+                <h1>我的微官网</h1>
+                <h2>模块</h2>
+            </div>
+            <img class="h-img" src="/resource/image/admin/shoper/module-wsite.png" />
+        </div>
+        <div class="desc"><span class="bold">服务模块说明：</span>该模块为用户提供在微信公众号里建设一个官方网站的功能，通过几种不同风格的模板，将企业的信息用很优美的形式展现出来，告别以往回复1、回复2这种单调的信息展现形式。</div>
+        <a href="#custom-desc" class="detail tangerine" data-toggle="modal">查看详细</a>
+        <!-- 弹出框 -->
+        <div id="custom-desc" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3>我的微官网模块</h3>
+            </div>
+            <div class="modal-body">
+                <p>用户根据自己的需要选择官网的模板，然后根据模板提供的界面，选择二级菜单的设置，比如“产品”、“企业文化”、“联系我们”等等，配置相应的图片和文字说明，打造成一个迷你的官方网站。</p>
+                <p>粉丝首次关注账号是，提示粉丝输入相应的关键词以获得官网的信息，点击推送的图文消息，就可以进入官网的详细界面，一一浏览详细信息。</p>
+            </div>
+        </div>
+        <p class="vip-only">VIP用户尊享服务模块</p>
+        <div class="btn-cont">
+
+
+
+        </div>
+        <img class="vip" src="/resource/image/admin/shoper/vip.png">
+    </div>
+</div>
+</body>
+</html>

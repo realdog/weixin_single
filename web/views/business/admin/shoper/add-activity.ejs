@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="/resource/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/resource/css/admin/admin.css" />
+<link rel="stylesheet" href="/resource/jquery-ui/css/smoothness/jquery-ui-1.10.0.custom.min.css" />
+<link rel="stylesheet" href="/resource/css/plugin/jquery-ui-timepicker-addon.css" />
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/resource/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/resource/js/plugin/operamasks-ui.min.js"></script>
+<script type="text/javascript" src="/resource/jquery-ui/js/jquery-ui-1.10.0.custom.min.js"></script>
+<script type="text/javascript" src="/resource/js/plugin/timepicker/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="/resource/js/plugin/timepicker/jquery-ui-timepicker-zh-CN.js"></script>
+<script type="text/javascript" src="/resource/js/plugin/timepicker/jquery-ui-sliderAccess.js"></script>
+<title>新建活动</title>
+<style>
+body{font-size: 12px;}
+#startDate,#endDate{
+	width: 135px;
+}
+.form .control-label{
+	display: inline-block;
+}
+.form .help-inline{
+	margin-bottom: 5px;
+}
+</style>
+</head>
+
+<body>
+	<div class="container"><h3>新建活动</h3></div>
+	<div class="container well">
+		<div class="row">
+			<div class="span3">
+				<img id="defaultconver" src="/resource/upload/activityPic/default/3_1.jpg" />
+			</div>
+			<div class="span7">
+				<form action="#" class="form" id="activityform">
+					<div class="control-group">
+						<label class="control-label">活动名称</label><span class="maroon">*</span><span class="help-inline">（不能超过64个字）</span>
+						<div class="controls">
+					    	<input type="text" id="activityname" class="span5" name="activityname" />
+					    </div>
+				    </div>
+					<div class="control-group">
+						<label class="control-label">活动类别</label>
+						<div class="controls">
+					    	<select name="type" id="type">
+							  <option title="优惠券推广活动"  value="3">优惠券推广活动</option>
+							  <option title="刮刮乐抽奖活动"  value="4">刮刮乐抽奖活动</option>
+							  <option title="大转盘抽奖活动"  value="5">大转盘抽奖活动</option>
+							</select>
+					    </div>
+				    </div>
+					<div class="control-group">
+						<label class="control-label">活动时间</label><span class="maroon">*</span><span class="help-inline">必填,请确保活动开始时间需比当前时间晚20分钟，否则校验无法通过！</span>
+   						<div class="controls">
+						     从<input id="startDate" name="startDate" type="text" value="" readonly>
+						     到 <input id="endDate" name="endDate" type="text" value="" readonly>（活动将会在启动前10分钟进入预热）
+					    </div>
+				    </div>
+				    <div class="control-group">
+				  	  <label class="control-label" for="keyword">活动回复关键词</label><span class="maroon">*</span><span class="help-inline">（活动的关键词不能重复，且不建议包含标点符号）</span>
+				  	  <div class="controls">
+					  	  <input type="text" value="我要抢券" id="keyword" name="keyword">
+				  	  </div>
+				    </div>
+	    		  	<div class="control-group">
+					    <div class="controls">
+					      <button id="save-btn" type="submit" class="btn btn-primary">保存</button>
+					      <a href="./activitylist" id="cancel-btn" type="button" class="btn">取消</a>
+					    </div>
+				    </div>
+				    <input id="wuid" name="wuid" type="hidden" value="<%=wuid%>" />
+			    </form>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+$(function(){
+	$('#startDate').datetimepicker();
+	$('#endDate').datetimepicker();
+	var validator = $("#activityform").validate({
+		onfocusout: false,
+		rules: {
+			activityname: {required: true,maxlength: 64},
+			startDate:{required:true,startDate:true},
+			endDate:{required:true,afterDate:true},
+			keyword: {required: true,maxlength: 64}
+		},
+		messages: {
+			activityname: {required: "活动名称不能为空",maxlength: "不能超过64个字符"},
+			startDate:{required:"不能为空"},
+			endDate:{required:"不能为空"},
+			keyword: {required: "不能为空",maxlength: "不能超过64个字"}
+		},
+		showErrors: function(errorMap, errorList) {
+			if (errorList && errorList.length > 0) {
+				$.each(errorList,
+				function(index, obj) {
+					var item = $(obj.element);
+					if(item.is(".cover")){
+						alert(obj.message);
+					}
+					// 给输入框添加出错样式
+					item.closest(".control-group").addClass('error');
+					item.attr("title",obj.message);
+				});
+			} else {
+				var item = $(this.currentElements);
+				item.closest(".control-group").removeClass('error');
+				item.removeAttr("title");
+			}
+		},
+		submitHandler: function() {
+			var $form = $("#activityform");
+			var $btn = $("#save-btn");
+			if($btn.hasClass("disabled")) return;
+			var submitData = {
+					activityname: $("input[name='activityname']", $form).val(),
+					type: $("select[name='type']", $form).val(),
+					startDate: $("input[name='startDate']", $form).val(),
+					endDate: $("input[name='endDate']", $form).val(),
+					wuid: $("input[name='wuid']", $form).val(),
+					keyword: $("input[name='keyword']", $form).val(),
+					action : "add"
+			};
+			$btn.addClass("disabled");
+			$.post('./activityManager', submitData,function(data) {
+				$btn.removeClass("disabled");
+				if(data.error == "keyword"){
+					alert("这个关键词已被使用，请重新设置活动关键词");
+					$("input[name='keyword']").focus();
+					return;
+				}
+				if (data.success == true) {
+					alert("保存成功，请设置活动详细内容");
+					var url;
+					if(submitData.type == 3){
+						url = "coupon-setting?baid=" + data.baid;
+					} else if(submitData.type == 4){
+						url = "lottery-setting?baid=" + data.baid;
+					} else if(submitData.type == 5){
+						url = "pan-setting?baid=" + data.baid;
+					}
+					window.location.href = url;
+				}  else{
+					alert("保存失败");
+				}
+			},"json");
+			return false;
+		}
+	});
+	$.validator.addMethod("afterDate", function(value) {
+		var $startDate = $("input[name='startDate']");
+		var $endDate = $("input[name='endDate']");
+		$startDate.datetimepicker('setDate',$startDate.val());
+		$endDate.datetimepicker('setDate',$endDate.val());
+	    return $endDate.datetimepicker('getDate') > $startDate.datetimepicker('getDate');
+	}, '结束时间必须大于开始时间');
+	$.validator.addMethod("startDate", function(value) {
+		var $startDate = $("input[name='startDate']");
+		var $endDate = $("input[name='endDate']");
+		$startDate.datetimepicker('setDate',$startDate.val());
+		$endDate.datetimepicker('setDate',$endDate.val());
+		var tt = $startDate.datetimepicker('getDate') - new Date();
+		return (tt/(1000*60)) > 15;
+	}, '开始时间必须在15分钟以后');
+	
+	$("#type").change(function() {
+		var type = $("#type").val();
+		if (type == 3) {
+			$("img#defaultconver").attr("src", "/resource/image/admin/shoper/coupon/d-01.jpg");
+			$("input#keyword").val("我要抢券");
+		} else if (type == 4) {
+			$("img#defaultconver").attr("src", "/resource/image/admin/shoper/lotto/d-01.jpg");
+			$("input#keyword").val("我要刮奖");
+		} else if (type == 5) {
+			$("img#defaultconver").attr("src", "/resource/image/admin/shoper/pan/d-01.jpg");
+			$("input#keyword").val("我要抽奖");
+		}
+	});
+	
+	var typeParam = getUrlParam("type");
+	if (typeParam == 4) {
+		$("#type").val(4).change();
+	} else if (typeParam == 5) {
+		$("#type").val(5).change();
+	}
+});
+function getUrlParam(name) {
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+	var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+	if (r!=null) return unescape(r[2]); return null; //返回参数值
+}
+</script>
+</html>
+

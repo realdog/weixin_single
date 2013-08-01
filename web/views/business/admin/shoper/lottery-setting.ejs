@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/resource/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/resource/css/admin/admin.css" />
+    <link rel="stylesheet" href="/resource/jquery-ui/css/smoothness/jquery-ui-1.10.0.custom.min.css" />
+    <link rel="stylesheet" href="/resource/css/plugin/jquery-ui-timepicker-addon.css" />
+    <link rel="stylesheet" href="/resource/css/admin/appmsg.css" />
+    <link rel="stylesheet" href="/resource/css/admin/coupon-setting.css" />
+
+    <script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/resource/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/resource/js/plugin/operamasks-ui.min.js"></script>
+    <script type="text/javascript" src="/resource/jquery-ui/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <script type="text/javascript" src="/resource/js/plugin/timepicker/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="/resource/js/plugin/timepicker/jquery-ui-timepicker-zh-CN.js"></script>
+    <script type="text/javascript" src="/resource/js/plugin/timepicker/jquery-ui-sliderAccess.js"></script>
+    <script type="text/javascript" src="/resource/js/page/html-helper.js"></script>
+    <script type="text/javascript" src="/resource/js/page/activity-setting.js"></script>
+    <script type="text/javascript" src="/resource/js/page/lotto-setting.js"></script>
+    <title>刮刮卡活动设置</title>
+</head>
+
+<body>
+<div class="main-title">
+    <h3>刮刮卡活动设置</h3>
+</div>
+<form action="./lottery-save" id="lottoform" method="post">
+<div class="cont fn-clear">
+    <div class="cont-left msg-preview">
+        <div id="appmsgItem1" class="msg-item">
+            <h4 class="msg-t">
+                <span class="i-title">活动即将开始</span>
+            </h4>
+            <p class="msg-meta">
+                <!--<span class="msg-date">2013-05-21</span>-->
+            </p>
+            <div class="cover">
+                <p class="default-tip" style="display: none;">封面图片</p>
+                <img src="" class="i-img cover1" />
+            </div>
+            <p class="msg-text summary1"></p>
+        </div>
+    </div>
+    <div class="cont-right">
+        <div class="form">
+            <div class="control-group">
+                <label class="control-label">活动预热说明，活动开始前十分钟进行预热</label><span class="maroon">*</span><span class="help-inline">(必填,不能超过64个字)</span>
+                <div class="controls">
+                    <input type="text" id="title1" value="活动即将开始" class="span6 title" name="title1" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">活动预热图片</label><span class="maroon">*</span><span class="help-inline">(必须上传一张图片)</span>
+                <div class="controls">
+                    <div class="cover-area">
+                        <div class="cover-hd">
+                            <input id="file_upload1" name="file_upload1"  class="file_upload" type="file" />
+                            <input id="cover1" class="cover-input" value="" name="cover1" type="hidden" />
+                        </div>
+                        <p id="upload-tip" class="upload-tip">大图片建议尺寸：700像素 * 300像素</p>
+                        <p class="img-area cover-bd" >
+                            <img src="" id="img" class="cover1">
+                            <a href="javascript:;" class="vb cover-del" >删除</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="desc-block" class="control-group">
+                <label class="control-label">活动预热说明</label> <span class="help-inline">(不能超过2000个字)</span>
+                <div class="controls">
+                    <textarea name="summary1" rows="4" id="summary1" class="msg-txta" >活动说明</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="startDate">活动开始时间</label>
+                <div class="controls">
+                    从<input id="startDate" name="startDate" type="text" value="<%=startDate%>" readonly>
+                    到 <input id="endDate" name="endDate" type="text" value="<%=endDate%>" readonly>
+                    <span class="maroon">*</span><span class="help-inline">必填 </span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="keyword">活动回复关键词</label>
+                <div class="controls">
+                    <input type="text" value="<%=keyword%>" id="keyword" name="keyword" >
+                    <span class="maroon">*</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="repeatTips">重复抽奖回复</label>
+                <div class="controls">
+                    <input type="text" value="亲，刮奖活动每人只能玩一次哦。" id="repeatTips" name="repeatTips" class="span4" >
+                    <span class="maroon">*</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="cont fn-clear">
+    <div class="cont-left msg-preview">
+        <div id="appmsgItem1" class="msg-item">
+            <h4 class="msg-t">
+                <span class="i-title">活动开始，请进入页面开始刮奖</span>
+            </h4>
+            <p class="msg-meta">
+                <!--<span class="msg-date">2013-05-21</span>-->
+            </p>
+            <div class="cover">
+                <p class="default-tip" style="display: none;">封面图片</p>
+                <img src="" class="i-img cover2" />
+            </div>
+            <p class="msg-text summary2"></p>
+        </div>
+    </div>
+    <div class="cont-right">
+        <div class="form">
+            <div class="control-group">
+                <label class="control-label">开始抽奖标题</label><span class="maroon">*</span><span class="help-inline">(必填,不能超过64个字)</span>
+                <div class="controls">
+                    <input type="text" id="title2" value="活动开始，请进入页面开始刮奖" class="span6 title" name="title2" />
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label">开始抽奖图片</label><span class="maroon">*</span><span class="help-inline">(必须上传一张图片)</span>
+                <div class="controls">
+                    <div class="cover-area">
+                        <div class="cover-hd" >
+                            <input id="file_upload2" name="file_upload2"  class="file_upload" type="file" />
+                            <input id="cover2" class="cover-input" value="" name="cover2" type="hidden" />
+                        </div>
+                        <p id="upload-tip" class="upload-tip">大图片建议尺寸：700像素 * 300像素</p>
+                        <p class="img-area cover-bd" >
+                            <img src="" id="img" class="cover2">
+                            <a href="javascript:;" class="vb cover-del" >删除</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div id="desc-block" class="control-group">
+                <label class="control-label">兑奖说明</label> <span class="help-inline">(不能超过2000个字)</span>
+                <div class="controls">
+                    <textarea name="summary2" rows="4" id="summary2" class="msg-txta" >请点击进入刮奖活动页面</textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="cont fn-clear other-setting">
+    <div class="cont-left msg-preview">
+        <h3 style="text-align: center;">其他设置</h3>
+    </div>
+    <div class="cont-right">
+        <div class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="prize1">一等奖奖品设置</label>
+                <div class="controls">
+                    <input name="prize1" class="span4" id="prize1" type="text" />
+                    <span class="maroon">*</span><span class="help-inline">必填，不能超过50个字 </span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="amount1">一等奖奖品数量</label>
+                <div class="controls">
+                    <input name="amount1" class="span1" id="amount1" type="text" />
+                    <span class="maroon">*</span><span class="help-inline">必填，首次设置后不能修改，数量必须是大于1且小于500  </span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="prize2">二等奖奖品设置</label>
+                <div class="controls">
+                    <input name="prize2" class="span4" id="prize2" type="text" />
+                    <span class="maroon">*</span><span class="help-inline">必填，不能超过50个字</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="amount2">二等奖奖品数量</label>
+                <div class="controls">
+                    <input name="amount2" class="span1" id="amount2" type="text"   />
+                    <span class="maroon">*</span><span class="help-inline">必填，首次设置后不能修改，数量必须是大于1且小于500  </span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="prize1">三等奖奖品设置</label>
+                <div class="controls">
+                    <input name="prize3" class="span4" id="prize3" type="text" />
+                    <span class="maroon">*</span><span class="help-inline">必填 ，不能超过50个字</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="amount3">三等奖奖品数量</label>
+                <div class="controls">
+                    <input name="amount3" class="span1" id="amount3" type="text" />
+                    <span class="maroon">*</span><span class="help-inline">必填 ，首次设置后不能修改，数量必须是大于1且小于500 </span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="totalPeople">预计参加抽奖人数</label>
+                <div class="controls">
+                    <input name="totalPeople" class="span1" id="totalPeople" type="text" />
+                    <span class="maroon">*</span><span class="help-inline">必填 ，须大于奖品的总数.<span style="color:red">中奖概率为（奖品总数除预计参与人数）</span> </span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="playtotal">每人参与的总次数</label>
+                <div class="controls">
+                    <input name="playtotal" class="span1" id="playtotal" type="text"/>
+                    <span class="maroon">*</span><span class="help-inline">必填 ，数量必须是大于1且小于100000</span>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="playperday">每人每天可参与次数</label>
+                <div class="controls">
+                    <input name="playperday" class="span1" id="playperday" type="text" />
+                    <span class="maroon">*</span><span class="help-inline">必填 ，数量必须是大于1且不能大于每人可以参与刮奖的总次数</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="btn-cont">
+    <%
+    if (!isRead) {
+    %>
+    <button id="save-btn" type="submit" class="btn btn-primary btn-large">保存</button>
+    <%
+    }
+    %>
+    <a href="activitylist" id="cancel-btn" type="button" class="btn btn-large">取消</a>
+</div>
+<input id="baid" name="baid" type="hidden" value="<%=baid%>" />
+<input id="type" name="type" type="hidden" value="<%=type%>" />
+<input id="activityName" name="activityName" type="hidden" value="<%=activityName%>" />
+</form>
+<script type="text/javascript">
+    if (<%=isRead%>) {
+        $("input").attr("disabled","disabled");
+        $(".cover-hd").hide();
+        $("textarea").attr("disabled","disabled");
+        $(".vb").html("");
+    }
+    var jsonconfig = <%=config%>;
+    $("#amount").val(jsonconfig.amount);
+    $("#title1").val(jsonconfig.before.title);
+    $("#summary1").val(jsonconfig.before.summary);
+    $("#cover1").val(jsonconfig.before.cover);
+    $("#cover2").val(jsonconfig.running.cover);
+    $(".cover1").attr("src", jsonconfig.before.cover).show();
+    $(".cover2").attr("src", jsonconfig.running.cover).show();
+    $("#repeatTips").val(jsonconfig.running.tips);
+    $("#title2").val(jsonconfig.running.title);
+    $("#summary2").val(jsonconfig.running.summary);
+    $("#prize1").val(jsonconfig.prize.prize1);
+    $("#amount1").val(jsonconfig.prize.amount1);
+    $("#prize2").val(jsonconfig.prize.prize2);
+    $("#amount2").val(jsonconfig.prize.amount2);
+    $("#prize3").val(jsonconfig.prize.prize3);
+    $("#amount3").val(jsonconfig.prize.amount3);
+    $("#totalPeople").val(jsonconfig.prize.totalPeople);
+    $("#playtotal").val(jsonconfig.prize.playtotal);
+    $("#playperday").val(jsonconfig.prize.playperday);
+</script>
+</body>
+</html>

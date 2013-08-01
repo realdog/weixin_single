@@ -1,0 +1,137 @@
+var subscribe = function (message, res, bKey) {
+    pool.getConnection(function(err, connection) {
+        if (!err) {
+            connection.query("SELECT id from user where userkey= ? AND bkey = ?" , [message.FromUserName, bKey], function(err, results){
+                if (!err) {
+                    if ((results.length == 1)) {
+                        var id = results[0]["id"];
+                        connection.query("UPDATE user set status = 1 where id = ? ", [id], function(err, results){
+                            if (!err) {
+                                if (results.affectedRows != 1) {
+
+                                } else {
+                                    connection.query("SELECT data from rule where input_type=0 AND bkey = ? ", [bKey], function(err, results){
+                                        connection.end();
+                                        if (!!err) {
+                                            res.reply("欢迎继续访问我的微信公众平台账号", 1);
+                                        } else {
+                                            if (results.lenth > 0) {
+                                                try {
+                                                    var objData = JSON.parse(results[0]["data"]);
+                                                    res.reply(objData.message2, 0);
+                                                } catch (e) {
+                                                    res.reply("欢迎继续访问我的微信公众平台账号", 1);
+                                                }
+                                            } else {
+                                                res.reply("欢迎继续访问我的微信公众平台账号", 1);
+                                            }
+                                        }
+                                    });
+                                }
+                            } else {
+                                connection.end();
+                            }
+                        });
+                    } else if (results.length == 0) {
+                        connection.query("INSERT INTO user SET ?", {bkey:bKey, userkey: message.FromUserName, status: 1}, function(err, result) {
+                            if (!!err) {
+                                connection.end();
+                                res.reply("欢迎访问我的微信公众平台账号", 1);
+                            } else {
+                                if (!!result.insertId) {
+                                    connection.query("SELECT data from rule where input_type=0 AND bkey = ? ", [bKey], function(err, results){
+                                        connection.end();
+                                        if (!!err) {
+                                            res.reply("欢迎访问我的微信公众平台账号", 1);
+                                        } else {
+                                            if (results.lenth > 0) {
+                                                try {
+                                                    var objData = JSON.parse(results[0]["data"]);
+                                                    res.reply(objData.message1, 0);
+                                                } catch (e) {
+                                                    res.reply("欢迎访问我的微信公众平台账号", 1);
+                                                }
+                                            } else {
+                                                res.reply("欢迎访问我的微信公众平台账号", 1);
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+
+                } else {
+                    console.log(err);
+                    connection.end();
+                }
+
+            });
+        } else {
+            console.log(err);
+            connection.end();
+            // exception
+        }
+    });
+};
+
+var unsubscribe = function(message, res, bKey) {
+    console.log(message)
+    pool.getConnection(function(err, connection) {
+        if (!err) {
+            connection.query("SELECT id from user where userkey = ? AND bkey = ?", [message.FromUserName, bKey], function(err, results){
+                if (!err) {
+                    if ((results.length == 1)) {
+                        var id = results[0]["id"];
+                        connection.query("UPDATE user set status = 0 where id = ? ", [id], function(err, results){
+                            connection.end();
+                            if (!err) {
+                                if (results.affectedRows != 1) {
+                                    throw err;
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    connection.end();
+                }
+            });
+        } else {
+            // exception
+        }
+    });
+};
+
+var CLICK = function(message, res, bKey) {
+    var EventKey = xss(message.EventKey);
+    var bKey = xss(bKey);
+    pool.getConnection(function(err, connection) {
+        if (!err) {
+            connection.query("SELECT id, data from rule where bkey = ? AND keyword = ? AND input_type = 1 ", [bKey, EventKey], function(err, results){
+                if (!err) {
+                    if (results.length > 0) {
+                        return results[0]["data"];
+                    }
+                }
+            });
+        }
+    });
+
+};
+
+
+module.exports.do = function (message, req, res) {
+    for (var key in message) {
+        message[key] = xss(message[key]);
+    }
+    if (message.Event == 'subscribe') {
+        subscribe(message, res, req.bKey);
+    } else if (message.Event == 'unsubscribe') {
+        unsubscribe(message, res, req.bKey);
+    } else if (message.Event == 'CLICK') {
+        CLICK(message, res, req.bKey);
+    } else {
+
+    }
+
+};

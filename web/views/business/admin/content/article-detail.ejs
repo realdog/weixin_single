@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="/resource/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/resource/css/admin/admin.css" />
+<link rel="stylesheet" href="/resource/css/admin/appmsg.css" />
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/resource/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/resource/js/plugin/operamasks-ui.min.js"></script>
+<script type="text/javascript" src="/resource/js/page/appmsg.js"></script>
+<script type="text/javascript">window.UEDITOR_HOME_URL = '/resource/ueditor/';window.fixedImagePath='/resource/image/';</script>
+<script type="text/javascript" src="/resource/ueditor/editor_config.js"></script>
+<script type="text/javascript" src="/resource/ueditor/editor_all.js"></script>
+<title>单图文编辑</title>
+<style>
+label{
+	display: inline-block;
+}
+.help-inline{
+	vertical-align: top;
+}
+.row{
+	padding-top: 20px;
+	padding-bottom: 20px;
+}
+</style>
+</head>
+
+<body>
+	<div class="row">
+		<div class="span5 msg-preview">
+			<div class="msg-item-wrapper">
+				<div id="appmsgItem1" class="msg-item">
+					<h4 class="msg-t">
+						<span class="i-title">标题</span>
+					</h4>
+<%if (action == "add" || action=="") {%>                    
+					<p class="msg-meta">
+						<span class="msg-date"><%=currentTime%></span>
+					</p>
+					<div class="cover">
+						<p class="default-tip" >封面图片</p>                          
+						<img class="i-img"  style="">
+                      
+					</div>
+<% } else if (action == "edit") {%>   
+					<p class="msg-meta">
+						<span class="msg-date"><%=data.update_time%></span>
+					</p>
+					<div class="cover">
+						<p class="default-tip" style="display: none;">封面图片</p>
+						<img class="i-img" src="<%=data.jsondata.coverurl%>"  style="">
+                      
+					</div>                  
+<%}%>                      
+					<p class="msg-text"></p>
+				</div>
+				<div class="msg-hover-mask"></div>
+				<div class="msg-mask">
+					<span class="dib msg-selected-tip"></span>
+				</div>
+			</div>
+		</div>
+		<div class="span7">
+			<div class="msg-editer-wrapper">
+<%if (action == "add" || action=="") {%>             
+				<div class="msg-editer">
+					<form id="appmsg-form" class="form">                   
+						<div class="control-group">
+							<label class="control-label">标题</label><span class="maroon">*</span><span class="help-inline">(必填,不能超过64个字)</span>
+							<div class="controls">
+						    	<input type="text" value="" id="title" class="span5" style="width: 482px;" name="title" />
+						    </div>
+					    </div>
+					    <div class="control-group">
+							<label class="control-label">封面</label><span class="maroon">*</span><span class="help-inline">(必须上传一张图片)</span>    
+							<div class="controls">
+								<div class="cover-area">
+									<div class="cover-hd">
+										<input id="file_upload" name="file_upload" type="file" />
+										<input id="coverurl" value="" name="coverurl" type="hidden" />
+									</div>
+									<p id="upload-tip" class="upload-tip">大图片建议尺寸：720像素 * 400像素</p>
+									<p id="imgArea" class="cover-bd" style="display: none;">
+									<img src="" id="img">
+									<a href="javascript:;" class="vb cover-del" id="delImg">删除</a>
+									</p>
+								</div>
+							</div>
+						</div>
+						<a id="desc-block-link" href="javascript:void(0);" class="url-link block" >添加摘要</a>
+					  	<div id="desc-block" style="display: none;" class="control-group">
+							<label class="control-label">摘要</label> <span class="help-inline">(不能超过120个字)</span>          
+						    <div class="controls">
+								<textarea name="summary" id="summary" class="msg-txta"></textarea>    
+							</div>
+						</div>
+					  	<div class="control-group">
+						<label class="control-label">正文</label> <span class="maroon">*</span><span class="help-inline">(必填,不能超过20000个字)</span>     
+						    <div class="controls">
+								<script type="text/plain" id="editor"></script>
+							</div>
+						</div>
+						<a id="url-block-link" href="javascript:void(0);" class="url-link block" >添加来源</a>
+					  	<div id="url-block"style="display: none;" class="control-group">
+							<label class="control-label">来源</label> <span class="help-inline">(请输入正确的URL链接格式)</span>          
+						    <div class="controls">
+								<input type="text" id="source_url" class="span5" value="" style="width: 482px;" name="source_url" />
+							</div>
+						</div>
+					  	<div class="control-group">
+						    <div class="controls">
+						      <button id="save-btn" type="submit" class="btn btn-primary btn-large">保存</button>
+						      <button id="cancel-btn" type="button" class="btn btn-large">取消</button>
+						    </div>
+					    </div>
+					    <input id="action" name="action" type="hidden" value="<%=action%>" />                       
+					</form> 
+				</div>            
+<% } else if (action == "edit") {%>             
+				<div class="msg-editer">
+					<form id="appmsg-form" class="form">                   
+						<div class="control-group">
+							<label class="control-label">标题</label><span class="maroon">*</span><span class="help-inline">(必填,不能超过64个字)</span>
+							<div class="controls">
+						    	<input type="text" value="<%=data.jsondata.title%>" id="title" class="span5" style="width: 482px;" name="title" />
+						    </div>
+					    </div>
+					    <div class="control-group">
+							<label class="control-label">封面</label><span class="maroon">*</span><span class="help-inline">(必须上传一张图片)</span>    
+							<div class="controls">
+								<div class="cover-area">
+									<div class="cover-hd">
+										<input id="file_upload" name="file_upload" type="file" />
+										<input id="coverurl" value="<%=data.jsondata.coverurl%>" name="coverurl" type="hidden" />
+									</div>
+									<p id="upload-tip" class="upload-tip">大图片建议尺寸：720像素 * 400像素</p>
+									<p id="imgArea" class="cover-bd" >
+									<img src="<%=data.jsondata.coverurl%>" id="img">
+									<a href="javascript:;" class="vb cover-del" id="delImg">删除</a>
+									</p>
+								</div>
+							</div>
+						</div>
+						<a id="desc-block-link" href="javascript:void(0);" class="url-link block" >添加摘要</a>
+					  	<div id="desc-block" style="display: none;" class="control-group">
+							<label class="control-label">摘要</label> <span class="help-inline">(不能超过120个字)</span>          
+						    <div class="controls">
+								<textarea name="summary" id="summary" class="msg-txta"><%=data.jsondata.summary%></textarea>    
+							</div>
+						</div>
+					  	<div class="control-group">
+						<label class="control-label">正文</label> <span class="maroon">*</span><span class="help-inline">(必填,不能超过20000个字)</span>     
+						    <div class="controls">
+								<script type="text/plain" id="editor"><%-data.jsondata.maincontent%></script>
+							</div>
+						</div>
+						<a id="url-block-link" href="javascript:void(0);" class="url-link block" >添加来源</a>
+					  	<div id="url-block"style="display: none;" class="control-group">
+							<label class="control-label">来源</label> <span class="help-inline">(请输入正确的URL链接格式)</span>          
+						    <div class="controls">
+								<input type="text" id="source_url" class="span5" value="<%=data.jsondata.source_url%>" style="width: 482px;" name="source_url" />
+							</div>
+						</div>
+					  	<div class="control-group">
+						    <div class="controls">
+						      <button id="save-btn" type="submit" class="btn btn-primary btn-large">保存</button>
+						      <button id="cancel-btn" type="button" class="btn btn-large">取消</button>
+						    </div>
+					    </div>
+					    
+					    <input id="rid" name="rid" type="hidden" value="<%=data.aid%>" />
+  
+					    <input id="action" name="action" type="hidden" value="<%=action%>" />                       
+					</form> 
+				</div>
+<%}%>                 
+				<span class="abs msg-arrow a-out" style="margin-top: 0px;"></span>
+				<span class="abs msg-arrow a-in" style="margin-top: 0px;"></span>
+			</div>
+		</div>
+	</div>   
+</body>
+
+</html>

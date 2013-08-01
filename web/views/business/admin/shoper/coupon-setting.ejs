@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/resource/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/resource/css/admin/admin.css" />
+    <link rel="stylesheet" href="/resource/jquery-ui/css/smoothness/jquery-ui-1.10.0.custom.min.css" />
+    <link rel="stylesheet" href="/resource/css/plugin/jquery-ui-timepicker-addon.css" />
+    <link rel="stylesheet" href="/resource/css/admin/appmsg.css" />
+    <link rel="stylesheet" href="/resource/css/admin/coupon-setting.css" />
+
+    <script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/resource/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/resource/js/plugin/operamasks-ui.min.js"></script>
+    <script type="text/javascript" src="/resource/jquery-ui/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <script type="text/javascript" src="/resource/js/plugin/timepicker/jquery-ui-timepicker-addon.js"></script>
+    <script type="text/javascript" src="/resource/js/plugin/timepicker/jquery-ui-timepicker-zh-CN.js"></script>
+    <script type="text/javascript" src="/resource/js/plugin/timepicker/jquery-ui-sliderAccess.js"></script>
+    <script type="text/javascript" src="/resource/js/page/html-helper.js"></script>
+    <script type="text/javascript" src="/resource/js/page/activity-setting.js"></script>
+    <script type="text/javascript" src="/resource/js/page/coupon-setting.js"></script>
+    <title>优惠券活动设置</title>
+</head>
+
+<body>
+<div class="main-title">
+    <h3>优惠券活动设置</h3>
+</div>
+<form action="./activity" id="couponform" method="post">
+    <div class="cont fn-clear">
+        <div class="cont-left msg-preview">
+            <div id="appmsgItem1" class="msg-item">
+                <h4 class="msg-t">
+                    <span class="i-title">活动即将开始</span>
+                </h4>
+                <p class="msg-meta">
+                    <!--<span class="msg-date">2013-05-21</span>-->
+                </p>
+                <div class="cover">
+                    <p class="default-tip" style="display: none;">封面图片</p>
+                    <img src="" class="i-img cover1" />
+                </div>
+                <p class="msg-text summary1"></p>
+            </div>
+        </div>
+        <div class="cont-right">
+            <div class="form">
+                <div class="control-group">
+                    <label class="control-label">活动预热说明，活动开始前十分钟进行预热</label><span class="maroon">*</span><span class="help-inline">(必填,不能超过64个字)</span>
+                    <div class="controls">
+                        <input type="text" id="title1" value="活动即将开始" class="span6 title" name="title1"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">活动预热图片</label><span class="maroon">*</span><span class="help-inline">(必须上传一张图片)</span>
+                    <div class="controls">
+                        <div class="cover-area">
+                            <div class="cover-hd">
+                                <input id="file_upload1" name="file_upload1"  class="file_upload" type="file" />
+                                <input id="cover1" class="cover-input" value="" name="cover1" type="hidden" />
+                            </div>
+                            <p id="upload-tip" class="upload-tip">大图片建议尺寸：700像素 * 300像素</p>
+                            <p class="img-area cover-bd" >
+                                <img src="" id="img" class="cover1">
+                                <a href="javascript:;" class="vb cover-del">删除</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div id="desc-block" class="control-group">
+                    <label class="control-label">预热活动说明</label> <span class="help-inline">(不能超过2000个字)</span>
+                    <div class="controls">
+                        <textarea name="summary1" rows="4" id="summary1" class="msg-txta"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label" for="startDate">活动开始时间</label>
+                    <div class="controls">
+                        从<input id="startDate" name="startDate" type="text" value="<%=startDate%>" readonly>
+                        到 <input id="endDate" name="endDate" type="text" value="<%=endDate%>" readonly>
+                        <span class="maroon">*</span><span class="help-inline">必填 </span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="amount">优惠券发放数量</label>
+                    <div class="controls">
+                        <input type="text" class="span1" value="0" name="amount" id="amount">张
+                        <span class="maroon">*</span><span class="help-inline">必填，首次设置后不能修改，数量必须大于1且小于1000 </span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="keyword">活动触发关键词</label>
+                    <div class="controls">
+                        <input type="text" value="<%=keyword%>" id="keyword" name="keyword">
+                        <span class="maroon">*</span><span class="help-inline">必填，用户输入该关键词时，将会触发活动 </span>
+                    </div>
+                </div>
+                <div class="control-group" style="display: none;">
+                    <label class="control-label" for="nostartTips">活动未开始回复</label>
+                    <div class="controls">
+                        <input type="text" value="亲，活动还没有开始" id="nostartTips" name="nostartTips" class="span4">
+                        <span class="maroon">*</span>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="repeatTips">重复抽奖回复</label>
+                    <div class="controls">
+                        <input type="text" value="亲，抢券活动每人只能抽一次哦。1" id="repeatTips" name="repeatTips" class="span4">
+                        <span class="maroon">*</span><span class="help-inline">必填，用户输入该关键词时，将会触发活动 </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cont fn-clear">
+        <div class="cont-left msg-preview">
+            <div id="appmsgItem1" class="msg-item">
+                <h4 class="msg-t">
+                    <span class="i-title">中奖公告</span>
+                </h4>
+                <p class="msg-meta">
+                    <!--<span class="msg-date">2013-05-21</span>-->
+                </p>
+                <div class="cover">
+                    <p class="default-tip" style="display: none;">封面图片</p>
+                    <img src="" class="i-img cover2" />
+                </div>
+                <p class="msg-text summary2"></p>
+            </div>
+        </div>
+        <div class="cont-right">
+            <div class="form">
+                <div class="control-group">
+                    <label class="control-label">中奖公告主题</label><span class="maroon">*</span><span class="help-inline">(必填,不能超过64个字)</span>
+                    <div class="controls">
+                        <input type="text" id="title2" value="中奖公1告" class="span6 title" name="title2"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">中奖公告图片</label><span class="maroon">*</span><span class="help-inline">(必须上传一张图片)</span>
+                    <div class="controls">
+                        <div class="cover-area">
+                            <div class="cover-hd">
+                                <input id="file_upload2" name="file_upload2"  class="file_upload" type="file" />
+                                <input id="cover2" class="cover-input" value="" name="cover2" type="hidden" />
+                            </div>
+                            <p id="upload-tip" class="upload-tip">大图片建议尺寸：700像素 * 300像素</p>
+                            <p class="img-area cover-bd" >
+                                <img src="" id="img" class="cover2">
+                                <a href="javascript:;" class="vb cover-del">删除</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div id="desc-block" class="control-group">
+                    <label class="control-label">中奖内容说明</label> <span class="help-inline">(不能超过2000个字)</span>
+                    <div class="controls">
+                        <textarea name="summary2" rows="4" id="summary2" class="msg-txta">你获得优惠说明，使用权限1说明</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="cont fn-clear">
+        <div class="cont-left msg-preview">
+            <div id="appmsgItem1" class="msg-item">
+                <h4 class="msg-t">
+                    <span class="i-title">活动已经结束</span>
+                </h4>
+                <p class="msg-meta">
+                    <!--<span class="msg-date">2013-05-21</span>-->
+                </p>
+                <div class="cover">
+                    <p class="default-tip" style="display: none;">封面图片</p>
+                    <img src="" class="i-img cover3" />
+                </div>
+                <p class="msg-text summary3"></p>
+            </div>
+        </div>
+        <div class="cont-right">
+            <div class="form">
+                <div class="control-group">
+                    <label class="control-label">发放完毕通知主题</label><span class="maroon">*</span><span class="help-inline">(必填,不能超过64个字)</span>
+                    <div class="controls">
+                        <input type="text" id="title3" value="活动已经结1束" class="span6 title" name="title3"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label">发放完毕通知图片</label><span class="maroon">*</span><span class="help-inline">(必须上传一张图片)</span>
+                    <div class="controls">
+                        <div class="cover-area">
+                            <div class="cover-hd">
+                                <input id="file_upload3" name="file_upload3" class="file_upload" type="file" />
+                                <input id="cover3" class="cover-input" value="" name="cover3" type="hidden" />
+                            </div>
+                            <p id="upload-tip" class="upload-tip">大图片建议尺寸：700像素 * 300像素</p>
+                            <p class="img-area cover-bd" >
+                                <img src="" id="img" class="cover3">
+                                <a href="javascript:;" class="vb cover-del">删除</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div id="desc-block" class="control-group">
+                    <label class="control-label">发放完毕通知内容</label> <span class="help-inline">(不能超过2000个字)</span>
+                    <div class="controls">
+                        <textarea name="summary3" rows="4" id="summary3" class="msg-txta">亲，下次早点哦~请继续关注我们的后1续活动</textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="btn-cont">
+        <%
+        if (!isRead) {
+        %>
+        <button id="save-btn" type="submit" class="btn btn-primary btn-large">保存</button>
+        <%
+        }
+        %>
+        <a href="activitylist" id="cancel-btn" type="button" class="btn btn-large">取消</a>
+    </div>
+    <input id="baid" name="baid" type="hidden" value="<%=baid%>" />
+    <input id="type" name="type" type="hidden" value="<%=type%>" />
+    <input id="activityName" name="activityName" type="hidden" value="<%=activityName%>" />
+</form>
+<script type="text/javascript">
+    if (<%=isRead%>) {
+        $("input").attr("disabled","disabled");
+        $(".cover-hd").hide();
+
+        $("textarea").attr("disabled","disabled");
+        $(".vb").html("");
+    }
+    var jsonconfig = <%=config%>;
+    $("#amount").val(jsonconfig.amount);
+    $("#title1").val(jsonconfig.before.title);
+    $("#summary1").val(jsonconfig.before.summary);
+    $("#cover1").val(jsonconfig.before.cover);
+    $("#cover2").val(jsonconfig.running.cover);
+    $("#cover3").val(jsonconfig.after.cover);
+    $(".cover1").attr("src", jsonconfig.before.cover).show();
+    $(".cover2").attr("src", jsonconfig.running.cover).show();
+    $(".cover3").attr("src", jsonconfig.after.cover).show();
+    $("#repeatTips").val(jsonconfig.running.tips);
+    $("#title2").val(jsonconfig.running.title);
+    $("#summary2").val(jsonconfig.running.summary);
+    $("#title3").val(jsonconfig.after.title);
+    $("#summary3").val(jsonconfig.after.summary);
+</script>
+</body>
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="/resource/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/resource/css/admin/admin.css" />
+<style type="text/css">
+	.table td {
+		min-width:50px;
+		overflow:hidden;text-overflow:ellipsis;
+	}
+	.table td.answer_content {
+		max-width:400px;
+		overflow:visible;
+	}
+</style>
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/resource/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/resource/js/plugin/omvalidate.min.js"></script>
+
+<script type="text/javascript">
+	var answersData = [{"answerId":<%=data[0].qid %>,"content":"<%=data[0].answer %>","keyword":"<%=data[0].keyword %>","qid":<%=data[0].qid %>,"resourceid":0,"type":<%=data[0].answer_type %>}];
+	var questionId = <%=data[0].qid %>;
+	$(document).ready(function(){		
+		 	/*后添加*/
+			 
+			 
+			// ("#picandtext").val();
+			 $("form.form-horizontal").show()
+			 	.find("legend").text("回复修改");
+			 if (answersData[0].type == 1) {
+				 $("div#textContainer").hide();
+				 $("div#picContainer").show();
+				 
+				 $("select[name='answertype']").val(1);
+			 	 $("select[name='picandtext']").val(answersData[0].content);
+				 
+			 } else {
+				 $("div#textContainer").show();
+				 $("div#picContainer").hide();
+				 $("textarea[name='description']").val(answersData[0].content);
+				 $contentDiv.html(Emotion.replaceEmoji($textarea.val()));
+				 $("select[name='answertype']").val(0);
+
+			 }
+				
+				
+			/*后添加*/
+		// 处理select的事件
+		$("form").delegate("#answertype", "change", function() {
+			var type = $("#answertype").val();
+			if (type == 1) {
+				$("div#textContainer").hide();
+				$("div#picContainer").show();
+			} else {
+				$("div#textContainer").show();
+				$("div#picContainer").hide();
+			}
+			
+		});
+		
+		
+
+		 
+
+		 
+		// 点击取消则恢复
+		 $(".form-actions button:last").click(function() {
+			location.href = "/business/admin/ai/question";
+			 return false;
+		 });
+		
+		 $("#back").click(function() {
+			 location.href = "question.jsp";
+			 return false;
+		 });
+		 
+		 // 处理 checkbox 的互动
+		 $("table th input").click(function() {
+			 $(this).closest("table").find("tbody input[type='checkbox']").attr("checked", !!$(this).attr("checked"));
+		 });
+		 $("tbody input[type='checkbox']").click(function(){
+			 if (!$(this).attr("checked")) {
+				 $("table th input").removeAttr("checked");
+			 }
+		 });
+		 
+		 // 删除处理
+/*		  $("#questionsContainer").delegate("tbody td span:last-child", "click", function() {
+			  if(confirm("您确定要删除所选的记录?")) {
+				  var actionData = answersData[$(this).closest("tr").index("tr") - 1];
+				  $.get("anhandler", {type:'del', ids:actionData.answerId, qid:questionId}, function (data, textStatus){
+					 location.reload(true);
+				  });
+			  }
+
+
+		  });	*/ 
+		 $("#del").click(function() {
+			 var checkeds = $("table tbody input[type='checkbox']:checked");
+			 if(checkeds.length) {
+				 if(confirm("您确定要删除所选的记录?")) {
+					 $(this).attr("disabled", true);
+					 var idsArray = [];
+					 checkeds.each(function() {
+						idsArray.push($(this).val());
+					 });
+					 if (idsArray.length > 0) {
+						 var qids = idsArray.join(',');
+						 $.get("anhandler", {type:'del', ids:qids, qid:quesitonId}, function (data, textStatus){
+							 location.reload(true);
+						 });
+					 }
+				 }
+			 } else {
+				 alert("请先选中需要删除的记录");
+			 }
+		 });
+		 
+		 // 处理添加/修改提交
+		 $("#anform").validate({
+			 rules : {
+				description : {required:true}, 
+				picandtext : {required:true}
+		 	 }, 
+			 messages : {
+				 description : {
+					required : "回复不能为空"
+				}, 
+				picandtext : {
+					required: "请选择一条图文素材，如果没有素材请先添加素材"
+				}
+			 },
+			 ignore : ":hidden",
+			 showErrors: function(errorMap, errorList) {
+					if (errorList && errorList.length > 0) {
+						$.each(errorList,
+								function(index, obj) {
+							var item = $(obj.element);
+							// 给输入框添加出错样式
+							item.closest(".control-group").addClass('error');
+							item.attr("title",obj.message);
+						});
+					} else {
+						var item = $(this.currentElements);
+						item.closest(".control-group").removeClass('error');
+						item.removeAttr("title");
+					}
+			 },
+			 submitHandler : function() {
+				 var $form = $("#anform");
+				 $("#submitbtn").attr("disabled", true);
+				 var submitData = {qid:questionId};
+				 if ($("input#anid", $form).val() == -1) {
+					 submitData.type = "add";
+				 } else {
+					 submitData.type = "modify";
+					 submitData.anid = $("input#anid", $form).val();
+				 }
+				 
+				 submitData.answertype = $("select[name='answertype']").val();
+				 if ($("select[name='answertype']").val() == 1) {
+					 submitData.resourceid = $("select[name='picandtext']").val();
+				 } else {
+					 submitData.content = $("textarea[name='description']", $form).val();
+				 }
+				 $.post('anhandler', submitData,function(data) {
+						$("#submitbtn").removeAttr("disabled");
+						if (data.success == true) {
+							alert("操作成功");
+							location.reload();
+						} else {
+							alert(data.message || "操作失败");
+						}
+					},"json");
+				 	return false;
+			 }
+		 });
+	});
+</script>
+<title>知识库管理</title>
+</head>
+<body>
+	<form class="form-horizontal" id="anform">
+		<input type="text" value="-1" style="display:none;" id="anid"/>
+        <fieldset>
+          <legend>回复添加</legend>
+          <div class="control-group">
+            <label class="control-label" for="input01">关键词</label>
+            <div class="controls">
+              <input class="input-xlarge" id="input01" type="text" name="keyword" disabled="disabled" value="<%=data[0].keyword %>"/>
+            </div>
+          </div>
+          <div class="control-group">
+		    <label class="control-label" for="answertype">回复类型:</label>
+		    <div class="controls">
+				<select class="span2" id="answertype" name="answertype">
+				  <option value="0">文字</option>
+				  <option value="1">图文</option>
+				</select>
+		    </div>
+		  </div>
+          <div class="control-group" id="textContainer">
+            <label class="control-label" for="textarea">回复</label>
+            <div class="controls">
+	           
+	           
+
+
+<link rel="stylesheet" href="/resource/css/admin/emotion.css" />
+<script type="text/javascript" src="/resource/js/page/emotion.js"></script>
+<script type="text/javascript" src="/resource/js/page/html-helper.js"></script>
+<div class="txtArea">
+	<div class="functionBar">
+		<div class="opt">
+			<a class="icon18C iconEmotion block" href="javascript:;">表情</a>
+		</div>
+		<div class="tip"></div>
+		<div class="emotions">
+			<table cellspacing="0" cellpadding="0">
+				<tbody>
+					<tr>
+						<td><div class="eItem" style="background-position: 0px 0;"
+								data-title="微笑"
+								data-gifurl="/resource/image/emotion/0.gif"></div></td>
+						<td><div class="eItem" style="background-position: -24px 0;"
+								data-title="撇嘴"
+								data-gifurl="/resource/image/emotion/1.gif"></div></td>
+						<td><div class="eItem" style="background-position: -48px 0;"
+								data-title="色"
+								data-gifurl="/resource/image/emotion/2.gif"></div></td>
+						<td><div class="eItem" style="background-position: -72px 0;"
+								data-title="发呆"
+								data-gifurl="/resource/image/emotion/3.gif"></div></td>
+						<td><div class="eItem" style="background-position: -96px 0;"
+								data-title="得意"
+								data-gifurl="/resource/image/emotion/4.gif"></div></td>
+						<td><div class="eItem" style="background-position: -120px 0;"
+								data-title="流泪"
+								data-gifurl="/resource/image/emotion/5.gif"></div></td>
+						<td><div class="eItem" style="background-position: -144px 0;"
+								data-title="害羞"
+								data-gifurl="/resource/image/emotion/6.gif"></div></td>
+						<td><div class="eItem" style="background-position: -168px 0;"
+								data-title="闭嘴"
+								data-gifurl="/resource/image/emotion/7.gif"></div></td>
+						<td><div class="eItem" style="background-position: -192px 0;"
+								data-title="睡"
+								data-gifurl="/resource/image/emotion/8.gif"></div></td>
+						<td><div class="eItem" style="background-position: -216px 0;"
+								data-title="大哭"
+								data-gifurl="/resource/image/emotion/9.gif"></div></td>
+						<td><div class="eItem" style="background-position: -240px 0;"
+								data-title="尴尬"
+								data-gifurl="/resource/image/emotion/10.gif"></div></td>
+						<td><div class="eItem" style="background-position: -264px 0;"
+								data-title="发怒"
+								data-gifurl="/resource/image/emotion/11.gif"></div></td>
+						<td><div class="eItem" style="background-position: -288px 0;"
+								data-title="调皮"
+								data-gifurl="/resource/image/emotion/12.gif"></div></td>
+						<td><div class="eItem" style="background-position: -312px 0;"
+								data-title="呲牙"
+								data-gifurl="/resource/image/emotion/13.gif"></div></td>
+						<td><div class="eItem" style="background-position: -336px 0;"
+								data-title="惊讶"
+								data-gifurl="/resource/image/emotion/14.gif"></div></td>
+					</tr>
+					<tr>
+						<td><div class="eItem" style="background-position: -360px 0;"
+								data-title="难过"
+								data-gifurl="/resource/image/emotion/15.gif"></div></td>
+						<td><div class="eItem" style="background-position: -384px 0;"
+								data-title="酷"
+								data-gifurl="/resource/image/emotion/16.gif"></div></td>
+						<td><div class="eItem" style="background-position: -408px 0;"
+								data-title="冷汗"
+								data-gifurl="/resource/image/emotion/17.gif"></div></td>
+						<td><div class="eItem" style="background-position: -432px 0;"
+								data-title="抓狂"
+								data-gifurl="/resource/image/emotion/18.gif"></div></td>
+						<td><div class="eItem" style="background-position: -456px 0;"
+								data-title="吐"
+								data-gifurl="/resource/image/emotion/19.gif"></div></td>
+						<td><div class="eItem" style="background-position: -480px 0;"
+
+								data-title="偷笑"
+								data-gifurl="/resource/image/emotion/20.gif"></div></td>
+						<td><div class="eItem" style="background-position: -504px 0;"
+								data-title="可爱"
+								data-gifurl="/resource/image/emotion/21.gif"></div></td>
+						<td><div class="eItem" style="background-position: -528px 0;"
+								data-title="白眼"
+								data-gifurl="/resource/image/emotion/22.gif"></div></td>
+						<td><div class="eItem" style="background-position: -552px 0;"
+								data-title="傲慢"
+								data-gifurl="/resource/image/emotion/23.gif"></div></td>
+						<td><div class="eItem" style="background-position: -576px 0;"
+								data-title="饥饿"
+								data-gifurl="/resource/image/emotion/24.gif"></div></td>
+						<td><div class="eItem" style="background-position: -600px 0;"
+								data-title="困"
+								data-gifurl="/resource/image/emotion/25.gif"></div></td>
+						<td><div class="eItem" style="background-position: -624px 0;"
+								data-title="惊恐"
+								data-gifurl="/resource/image/emotion/26.gif"></div></td>
+						<td><div class="eItem" style="background-position: -648px 0;"
+								data-title="流汗"
+								data-gifurl="/resource/image/emotion/27.gif"></div></td>
+						<td><div class="eItem" style="background-position: -672px 0;"
+								data-title="憨笑"
+								data-gifurl="/resource/image/emotion/28.gif"></div></td>
+						<td><div class="eItem" style="background-position: -696px 0;"
+								data-title="大兵"
+								data-gifurl="/resource/image/emotion/29.gif"></div></td>
+					</tr>
+					<tr>
+						<td><div class="eItem" style="background-position: -720px 0;"
+								data-title="奋斗"
+								data-gifurl="/resource/image/emotion/30.gif"></div></td>
+						<td><div class="eItem" style="background-position: -744px 0;"
+								data-title="咒骂"
+								data-gifurl="/resource/image/emotion/31.gif"></div></td>
+						<td><div class="eItem" style="background-position: -768px 0;"
+								data-title="疑问"
+								data-gifurl="/resource/image/emotion/32.gif"></div></td>
+						<td><div class="eItem" style="background-position: -792px 0;"
+								data-title="嘘"
+								data-gifurl="/resource/image/emotion/33.gif"></div></td>
+						<td><div class="eItem" style="background-position: -816px 0;"
+								data-title="晕"
+								data-gifurl="/resource/image/emotion/34.gif"></div></td>
+						<td><div class="eItem" style="background-position: -840px 0;"
+								data-title="折磨"
+								data-gifurl="/resource/image/emotion/35.gif"></div></td>
+						<td><div class="eItem" style="background-position: -864px 0;"
+								data-title="衰"
+								data-gifurl="/resource/image/emotion/36.gif"></div></td>
+						<td><div class="eItem" style="background-position: -888px 0;"
+								data-title="骷髅"
+								data-gifurl="/resource/image/emotion/37.gif"></div></td>
+						<td><div class="eItem" style="background-position: -912px 0;"
+								data-title="敲打"
+								data-gifurl="/resource/image/emotion/38.gif"></div></td>
+						<td><div class="eItem" style="background-position: -936px 0;"
+								data-title="再见"
+								data-gifurl="/resource/image/emotion/39.gif"></div></td>
+						<td><div class="eItem" style="background-position: -960px 0;"
+								data-title="擦汗"
+								data-gifurl="/resource/image/emotion/40.gif"></div></td>
+						<td><div class="eItem" style="background-position: -984px 0;"
+								data-title="抠鼻"
+								data-gifurl="/resource/image/emotion/41.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1008px 0;" data-title="鼓掌"
+								data-gifurl="/resource/image/emotion/42.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1032px 0;" data-title="糗大了"
+								data-gifurl="/resource/image/emotion/43.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1056px 0;" data-title="坏笑"
+								data-gifurl="/resource/image/emotion/44.gif"></div></td>
+					</tr>
+					<tr>
+						<td><div class="eItem"
+								style="background-position: -1080px 0;" data-title="左哼哼"
+								data-gifurl="/resource/image/emotion/45.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1104px 0;" data-title="右哼哼"
+								data-gifurl="/resource/image/emotion/46.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1128px 0;" data-title="哈欠"
+								data-gifurl="/resource/image/emotion/47.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1152px 0;" data-title="鄙视"
+								data-gifurl="/resource/image/emotion/48.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1176px 0;" data-title="委屈"
+								data-gifurl="/resource/image/emotion/49.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1200px 0;" data-title="快哭了"
+								data-gifurl="/resource/image/emotion/50.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1224px 0;" data-title="阴险"
+								data-gifurl="/resource/image/emotion/51.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1248px 0;" data-title="亲亲"
+								data-gifurl="/resource/image/emotion/52.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1272px 0;" data-title="吓"
+								data-gifurl="/resource/image/emotion/53.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1296px 0;" data-title="可怜"
+								data-gifurl="/resource/image/emotion/54.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1320px 0;" data-title="菜刀"
+								data-gifurl="/resource/image/emotion/55.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1344px 0;" data-title="西瓜"
+								data-gifurl="/resource/image/emotion/56.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1368px 0;" data-title="啤酒"
+								data-gifurl="/resource/image/emotion/57.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1392px 0;" data-title="篮球"
+								data-gifurl="/resource/image/emotion/58.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1416px 0;" data-title="乒乓"
+								data-gifurl="/resource/image/emotion/59.gif"></div></td>
+					</tr>
+					<tr>
+						<td><div class="eItem"
+								style="background-position: -1440px 0;" data-title="咖啡"
+								data-gifurl="/resource/image/emotion/60.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1464px 0;" data-title="饭"
+								data-gifurl="/resource/image/emotion/61.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1488px 0;" data-title="猪头"
+								data-gifurl="/resource/image/emotion/62.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1512px 0;" data-title="玫瑰"
+								data-gifurl="/resource/image/emotion/63.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1536px 0;" data-title="凋谢"
+								data-gifurl="/resource/image/emotion/64.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1560px 0;" data-title="示爱"
+								data-gifurl="/resource/image/emotion/65.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1584px 0;" data-title="爱心"
+								data-gifurl="/resource/image/emotion/66.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1608px 0;" data-title="心碎"
+								data-gifurl="/resource/image/emotion/67.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1632px 0;" data-title="蛋糕"
+								data-gifurl="/resource/image/emotion/68.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1656px 0;" data-title="闪电"
+								data-gifurl="/resource/image/emotion/69.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1680px 0;" data-title="炸弹"
+								data-gifurl="/resource/image/emotion/70.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1704px 0;" data-title="刀"
+								data-gifurl="/resource/image/emotion/71.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1728px 0;" data-title="足球"
+								data-gifurl="/resource/image/emotion/72.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1752px 0;" data-title="瓢虫"
+								data-gifurl="/resource/image/emotion/73.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1776px 0;" data-title="便便"
+								data-gifurl="/resource/image/emotion/74.gif"></div></td>
+					</tr>
+					<tr>
+						<td><div class="eItem"
+								style="background-position: -1800px 0;" data-title="月亮"
+								data-gifurl="/resource/image/emotion/75.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1824px 0;" data-title="太阳"
+								data-gifurl="/resource/image/emotion/76.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1848px 0;" data-title="礼物"
+								data-gifurl="/resource/image/emotion/77.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1872px 0;" data-title="拥抱"
+								data-gifurl="/resource/image/emotion/78.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1896px 0;" data-title="强"
+								data-gifurl="/resource/image/emotion/79.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1920px 0;" data-title="弱"
+								data-gifurl="/resource/image/emotion/80.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1944px 0;" data-title="握手"
+								data-gifurl="/resource/image/emotion/81.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1968px 0;" data-title="胜利"
+								data-gifurl="/resource/image/emotion/82.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -1992px 0;" data-title="抱拳"
+								data-gifurl="/resource/image/emotion/83.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2016px 0;" data-title="勾引"
+								data-gifurl="/resource/image/emotion/84.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2040px 0;" data-title="拳头"
+								data-gifurl="/resource/image/emotion/85.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2064px 0;" data-title="差劲"
+								data-gifurl="/resource/image/emotion/86.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2088px 0;" data-title="爱你"
+								data-gifurl="/resource/image/emotion/87.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2112px 0;" data-title="NO"
+								data-gifurl="/resource/image/emotion/88.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2136px 0;" data-title="OK"
+								data-gifurl="/resource/image/emotion/89.gif"></div></td>
+					</tr>
+					<tr>
+						<td><div class="eItem"
+								style="background-position: -2160px 0;" data-title="爱情"
+								data-gifurl="/resource/image/emotion/90.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2184px 0;" data-title="飞吻"
+								data-gifurl="/resource/image/emotion/91.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2208px 0;" data-title="跳跳"
+								data-gifurl="/resource/image/emotion/92.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2232px 0;" data-title="发抖"
+								data-gifurl="/resource/image/emotion/93.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2256px 0;" data-title="怄火"
+								data-gifurl="/resource/image/emotion/94.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2280px 0;" data-title="转圈"
+								data-gifurl="/resource/image/emotion/95.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2304px 0;" data-title="磕头"
+								data-gifurl="/resource/image/emotion/96.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2328px 0;" data-title="回头"
+								data-gifurl="/resource/image/emotion/97.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2352px 0;" data-title="跳绳"
+								data-gifurl="/resource/image/emotion/98.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2376px 0;" data-title="挥手"
+								data-gifurl="/resource/image/emotion/99.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2400px 0;" data-title="激动"
+								data-gifurl="/resource/image/emotion/100.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2424px 0;" data-title="街舞"
+								data-gifurl="/resource/image/emotion/101.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2448px 0;" data-title="献吻"
+								data-gifurl="/resource/image/emotion/102.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2472px 0;" data-title="左太极"
+								data-gifurl="/resource/image/emotion/103.gif"></div></td>
+						<td><div class="eItem"
+								style="background-position: -2496px 0;" data-title="右太极"
+								data-gifurl="/resource/image/emotion/104.gif"></div></td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="emotionsGif"></div>
+		</div>
+		<div class="clr"></div>
+	</div>
+	<div class="editArea">
+		<textarea id="description" name="description" style="display: none;"></textarea>
+		<div contenteditable="true" style="overflow-y: auto; overflow-x: hidden;"></div>
+	</div>
+</div>
+<script type="text/javascript">
+var $textarea = $(".editArea textarea");
+var $contentDiv = $(".editArea div");
+$(".functionBar .iconEmotion").click(function(){
+	//Emotion.saveRange();
+	$(".emotions").show();
+});
+$(".emotions").hover(function(){
+	
+},function(){
+	$(".emotions").fadeOut();
+});
+$(".emotions .eItem").mouseenter(function(){
+	$(".emotionsGif").html('<img src="'+$(this).attr("data-gifurl")+'">');
+}).click(function(){
+	Emotion.insertHTML('<img src="' + $(this).attr("data-gifurl") + '"' + 'alt="mo-' + $(this).attr("data-title") + '"' + "/>");
+	$(".emotions").fadeOut();
+	$textarea.trigger("contentValueChange");
+});
+$contentDiv.bind("keyup",function(){
+	$textarea.trigger("contentValueChange");
+	Emotion.saveRange();
+}).bind("keydown",function(e){
+    switch (e.keyCode) {
+    case 8:
+        var t = Emotion.getSelection();
+        t.type && t.type.toLowerCase() === "control" && (e.preventDefault(), t.clear());
+        break;
+    case 13:
+        e.preventDefault(),
+        Emotion.insertHTML("<br/>");
+        Emotion.saveRange();
+    }
+}).bind("mouseup",function(e){
+    Emotion.saveRange();
+    if ($.browser.msie && />$/.test($contentDiv.html())) {
+        var n = Emotion.getSelection();
+        n.extend && (n.extend(cursorNode, cursorNode.length), n.collapseToEnd()),
+        Emotion.saveRange();
+        Emotion.insertHTML(" ");
+    }
+});
+$textarea.bind("contentValueChange",function(){
+	$(this).val(Emotion.replaceInput($contentDiv.html()));
+});
+$contentDiv.html(Emotion.replaceEmoji($contentDiv.html()));
+</script>
+              <p class="help-block">
+			  	<span class="maroon">*</span> 重要，智能引擎会从您的回复中（如有多条）随机发送一条给用户
+	      	  </p>
+            </div>
+          </div>
+          <div class="control-group" id="picContainer">
+		    <label class="control-label" for="picandtext">图文资源:</label>
+		    <div class="controls">
+				<select class="span4" id="picandtext" name="picandtext">
+				<%for(var i=0; i<resource.length; i++){%>
+                <% if (resource[i].type=="s") {%>
+                <option value="<%=resource[i].aid%>"><%=resource[i].jsondata.title%></option>
+                <%} else{%>
+                <option value="<%=resource[i].aid%>"><%=resource[i].jsondata[0].title%></option>
+				<%}}%>
+				</select>
+				<button class="btn" type="button" onClick="window.location.href = '/business/admin/content/articlelist';return false;">管理图文素材</button>
+				<p class="help-block">
+			  		<span class="maroon">*</span> 必填，请选择一条图文素材
+	      	  	</p>
+		    </div>
+		  </div>
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="submitbtn">保存</button>
+            <button class="btn">取消</button>
+          </div>
+        </fieldset>
+      </form>
+</body>
+</html>

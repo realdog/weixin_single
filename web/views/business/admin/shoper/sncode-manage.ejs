@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="/resource/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/resource/css/admin/admin.css" />
+<link rel="stylesheet" href="/resource/jquery-ui/css/smoothness/jquery-ui-1.10.0.custom.min.css" />
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/resource/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+	var aid = 4601;
+	$(function(){
+		$("#checkcode-btn").click(function(){
+			var queryContent = $("#code-input").val();
+			var queryType = $("select#querytype").val();
+			if (queryContent == '') {
+				alert("查询内容不能为空");
+				return false;
+			}
+			if (queryType == 1) {
+				//window.location.href = "sncode-manage.jsp?aid=" + aid + "&sn=" + queryContent;
+			} else if (queryType == 2) {
+				//window.location.href = "sncode-manage.jsp?aid=" + aid + "&tel=" + queryContent;
+			}
+		});
+		
+		$("#reset-btn").click(function() {
+			window.location.href = "sncode-manage.jsp?aid=" + aid;
+			return false;
+		});
+		
+		$("table tr td a").click(function() {
+			var sncode = $(this).closest("tr").find("td:eq(1)").text();
+			if(confirm("确认SN码(" + sncode + ")设置为已使用？")){
+				$.post('./sncode', {action:"use",aid:aid,code:sncode},function(data) {
+					//window.location.href = "sncode-manage.jsp?aid=" + aid;
+				},"json");
+			}
+			return false;
+		});
+	});
+</script>
+<title>活动SN码管理</title>
+<style>
+.code-overview{
+	height: 40px;
+	background-color: #ffefaf;
+	line-height: 40px;
+	padding: 0 15px;
+	font-size: 14px;
+	margin-bottom: 20px;
+}
+</style>
+</head>
+<body>
+	<div class="main-title">
+		<h3>SN码发放管理</h3>
+	</div>
+	<div class="row code-overview">
+		<div class="span3">本次活动SN码总数：<span id="total">0</span>张</div>
+		<div class="span2">已发放：<span id="sendtotal"></span>张</div>
+		<div class="span2">已领取：<span id="usetotal"></span>张</div>
+	</div>
+	<div class="form-horizontal">
+		<div class="control-group">
+		    <div class="controls">
+		    	<select class="span2" id="querytype">
+				  <option value="1">SN码查询</option>
+				  <option value="2">手机查询</option>
+				</select>
+		    	<input type="text" id="code-input" class="span3" />
+		    	<button id="checkcode-btn" class="btn btn-primary">查询</button>
+		    	<button id="reset-btn" class="btn btn-primary">重置</button>
+		    </div>
+	    </div>
+	</div>
+	
+<div class="pagination">
+<% include ../include/pagesupport.ejs%>
+</div>
+	<table class="table table-hover table-striped">
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>SN码</th>
+                <th>其他</th>
+				<th>状态</th>
+                <th>用户信息</th>
+				<th>使用时间</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+<%for(var i=0; i<data.length; i++){%>
+<tr>	 
+				<td><%=data[i].sid%></td>
+				<td><%=data[i].sn%></td>
+                <td><%=data[i].other%></td>
+				<td flag="<%=data[i].flag%>">
+<% if (data[i].flag=="0") {%>                
+未使用
+<%}else if (data[i].flag=="1") {%>
+已发放
+<%}else if (data[i].flag=="2") {%> 
+已领取
+<%}%>
+				</td>
+				<td>姓名：<%=data[i].user_name%>&nbsp;电话：<%=data[i].user_mobile%>&nbsp;KEY：<%=data[i].userkey%></td>                
+				<td>
+<% if (data[i].use_time==null) {%>
+<%}else{%>
+	<%=data[i].use_time%>
+<%}%>            
+                </td>
+				<td></td>  
+                </tr>     
+<%}%>		
+		</tbody>
+	</table>
+<script language="javascript">
+$(function(){
+$("#total").html($("td[flag]").length);
+$("#sendtotal").html($("td[flag='1']").length);
+$("#usetotal").html($("td[flag='2']").length);
+});		   
+</script>
+</body>
+</html>

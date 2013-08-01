@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="/resource/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/resource/css/plugin/jquery.checkbox.css" />
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/resource/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/resource/js/plugin/checkbox/jquery.checkbox.min.js"></script>
+<title>互联网服务设置</title>
+<style>
+body{
+	margin-left:20px;
+}
+.table{
+	width: 50%;
+	float: left;
+}
+h5{
+	background: url("/resource/image/admin/service.png") no-repeat;
+	padding-left: 28px;
+	line-height: 24px;
+}
+.all-oper{
+	position: absolute;
+	top: 15px;
+	right: 10px;
+}
+.all-oper a{
+	cursor: pointer;
+	text-decoration: none;
+}
+.sel{
+	margin-right: 7px;
+}
+.unsel{
+	margin-left: 7px;
+}
+.toolbar{
+	text-align: right;
+	padding-right: 40px;
+}
+.sn{
+	background: url("/resource/image/admin/service.png") no-repeat;
+	padding-left: 40px;
+	display: inline-block;
+	*zoom: 1;
+	*display: inline;
+	line-height: 22px;
+}
+td .weather{	
+	background-position-y: -46px;
+}
+td .shoper{
+	background-position-y: -92px;
+}
+td .bk{
+	background-position-y: -138px;
+}
+td .translate{
+	background-position-y: -184px;
+}
+td .music{
+	background-position-y: -230px;
+}
+td .movie{
+	background-position-y: -276px;
+}
+td .lotteryticket{
+	background-position-y: -324px;
+}
+td .stock{
+	background-position-y: -371px;
+}
+td .delivery{
+	background-position-y: -416px;
+}
+td .bus{
+	background-position-y: -464px;
+}
+td .flight{
+	background-position-y: -510px;
+}
+td .rules{
+	background-position-y: -555px;
+}
+</style>
+<script>
+$(function(){
+	$('input:checkbox').checkbox();
+	$(".btn-primary").click(function(){
+		var slist = $("span.mark").map(function(){
+			if(!$(this).hasClass('jquery-checkbox-disabled')){
+				return this;
+			}
+		});
+		var data = {};
+		for(var i=0; i<slist.length; i++){
+			data[$(slist[i]).closest("td").attr("data-type")] = ($(slist[i]).parent().hasClass('jquery-checkbox-checked')? 1:0);
+		}
+		$.post("./netservice-save" , 
+			data,
+			function(result){
+				if(result.success){
+					alert("保存成功。");
+				}else{
+					alert("保存失败。");
+				}
+			} , "json");
+	});
+});
+</script>
+</head>
+<body>
+
+<h5>互联网接入服务</h5>
+	<!--  <div class="all-oper"><a class="sel">全开</a>|<a class="unsel">全关</a></div>-->
+<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>开通服务</th>
+				<th>回复关键词</th>
+				<th>状态</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><span class="sn weather">城市天气</span></td>
+				<td>“天气@城市名”， 如“天气@深圳”</td>
+           
+                
+				<td data-type="城市天气">
+<%
+if (service.indexOf('城市天气')>-1) {                     
+%>                
+                <input type="checkbox" checked/>
+<%
+ }else{
+%>
+                <input type="checkbox"/>
+<%
+ }
+%>
+                </td>
+			</tr>
+			<tr>
+				<td><span class="sn shoper">周边商家</span></td>
+				<td>即将推出，敬请期待</td>
+				<td data-type="周边商家"> 
+<%
+if (service.indexOf('周边商家')>-1) {                     
+%>                
+                <input type="checkbox" checked/>
+<%
+ }else{
+%>
+                <input type="checkbox"/>
+<%
+ }
+%>                               
+                </td>
+			</tr>
+			<tr>
+				<td><span class="sn bk">百度百科</span></td>
+				<td>“百科查询内容“，如”百科微信通“</td>
+				<td data-type="百度百科">
+<%
+if (service.indexOf('百度百科')>-1) {                     
+%>                
+                <input type="checkbox" checked/>
+<%
+ }else{
+%>
+                <input type="checkbox"/>
+<%
+ }
+%>                 
+                </td>
+			</tr>
+			<tr>
+				<td><span class="sn translate">即时翻译</span></td>
+				<td>“翻译查询内容（中文或英文）“</td>
+				<td data-type="即时翻译">
+<%
+if (service.indexOf('即时翻译')>-1) {                     
+%>                
+                <input type="checkbox" checked/>
+<%
+ }else{
+%>
+                <input type="checkbox"/>
+<%
+ }
+%>                
+                </td>
+			</tr>
+			<tr>
+				<td><span class="sn music">在线听歌</span></td>
+				<td>“ 听歌@歌名或听歌@歌手”，或者“听歌”随机听歌</td>
+				<td data-type="在线听歌">
+<%
+if (service.indexOf('在线听歌')>-1) {                     
+%>                
+                <input type="checkbox" checked/>
+<%
+ }else{
+%>
+                <input type="checkbox"/>
+<%
+ }
+%>                 
+                </td>
+			</tr>
+			<tr>
+				<td><span class="sn movie">豆瓣电影</span></td>
+				<td>即将推出，敬请期待</td>
+				<td data-type="豆瓣电影">
+<%
+if (service.indexOf('豆瓣电影')>-1) {                     
+%>                
+                <input type="checkbox" checked/>
+<%
+ }else{
+%>
+                <input type="checkbox"/>
+<%
+ }
+%>                
+                </td>
+			</tr>
+		</tbody>
+	</table>
+	<table class="table table-bordered table-striped">
+		<thead>
+			<tr>
+				<th>开通服务</th>
+				<th>回复关键词</th>
+				<th>状态</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td><span class="sn lotteryticket">彩票查询</span></td>
+				<td>即将推出，敬请期待</td>
+				<td data-type="彩票查询">
+<%
+if (service.indexOf('彩票查询')>-1) {                     
+%>                
+                <input type="checkbox" checked/>
+<%
+ }else{
+%>
+                <input type="checkbox"/>
+<%
+ }
+%>                 
+                </td>
+			</tr>
+			<tr>
+				<td><span class="sn stock">股票查询</span></td>
+				<td>"股票名称或股票代码"，如“股票中国联通”</td>
+				<td data-type="股票查询">
+<%
+if (service.indexOf('股票查询')>-1) {                     
+%>                
+                <input type="checkbox" checked/>
+<%
+ }else{
+%>
+                <input type="checkbox"/>
+<%
+ }
+%>                
+                </td>
+			</tr>
+			<tr>
+				<td><span class="sn delivery">快递查询</span></td>
+				<td>“ 快递单号”，如”快递102970792570“</td>
+				<td data-type="快递查询">
+<%
+if (service.indexOf('快递查询')>-1) {                     
+%>                
+                <input type="checkbox" checked/>
+<%
+ }else{
+%>
+                <input type="checkbox"/>
+<%
+ }
+%>                 
+                </td>
+			</tr>
+			<tr>
+				<td><span class="sn bus">火车查询</span></td>
+				<td>“ 火车车次”，如“ 火车T109“</td>
+				<td data-type="火车查询">
+<%
+if (service.indexOf('火车查询')>-1) {                     
+%>                
+                <input type="checkbox" checked/>
+<%
+ }else{
+%>
+                <input type="checkbox"/>
+<%
+ }
+%>                 
+                </td>
+			</tr>
+			<tr>
+				<td><span class="sn flight">航班查询</span></td>
+				<td>“航班航班号”，如“航班ZH1601“</td>
+				<td data-type="航班查询">
+<%
+if (service.indexOf('航班查询')>-1) {                     
+%>                
+                <input type="checkbox" checked/>
+<%
+ }else{
+%>
+                <input type="checkbox"/>
+<%
+ }
+%>                 
+                </td>
+			</tr>
+			<tr>
+				<td><span class="sn rules">星座密语</span></td>
+				<td>即将推出，敬请期待</td>
+				<td data-type="星座密语">
+<%
+if (service.indexOf('星座密语')>-1) {                     
+%>                
+                <input type="checkbox" checked/>
+<%
+ }else{
+%>
+                <input type="checkbox"/>
+<%
+ }
+%>                
+                </td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="toolbar"><a href="javascript:void(0)" class="btn btn-primary">保存</a></div>
+</body>
+</html>

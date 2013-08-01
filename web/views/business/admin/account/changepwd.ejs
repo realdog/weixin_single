@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>密码修改</title>
+<link rel="stylesheet" href="/resource/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/resource/css/admin/admin.css" />
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/resource/js/plugin/omvalidate.min.js"></script>
+<style>
+.username{
+	padding-top: 4px;
+	display: inline-block;
+	font-weight: bold;
+}
+</style>
+</head>
+<body>
+	<div class="main-title">
+		<h3>密码修改</h3>
+	</div>
+	<form id="pwdform" action="#" class="form-horizontal">
+	  <div class="control-group">
+	    <label class="control-label">用户名</label>
+	    <div class="controls">
+	      <span class="username"><%=username%></span>
+	    </div>
+	  </div>
+	  <div class="control-group">
+	    <label class="control-label" for="oldpwd">原密码</label>
+	    <div class="controls">
+	      <input type="password" name="oldpwd" id="oldpwd" />
+	      <span class="maroon">*</span><span class="help-inline">长度为6~16位字符</span>
+	    </div>
+	  </div>
+	  <div class="control-group">
+	    <label class="control-label" for="newpwd">新密码</label>
+	    <div class="controls">
+	      <input type="password" name="newpwd" id="newpwd" />
+	      <span class="maroon">*</span><span class="help-inline">长度为6~16位字符</span>
+	    </div>
+	  </div>
+	  <div class="control-group">
+	    <label class="control-label" for="renewpwd">确认</label>
+	    <div class="controls">
+	      <input type="password" name="renewpwd" id="renewpwd" />
+	      <span class="maroon">*</span>
+	    </div>
+	  </div>
+	  <div class="control-group">
+	    <div class="controls">
+	      <button id="submit-btn" type="submit" class="btn btn-primary">保存</button>
+	      <button id="return-btn" type="button" class="btn">返回</button>
+	    </div>
+	  </div>
+	</form>
+</body>
+<script type="text/javascript">
+$(function(){
+	var validator = $("#pwdform").validate({
+		rules: {
+			oldpwd: {
+				required: true,
+				minlength: 6,
+				maxlength: 16
+			},
+			newpwd: {
+				required: true,
+				minlength: 6,
+				maxlength: 16
+			},
+			renewpwd: {
+				required: true,
+				equalTo: "#newpwd"
+			}
+		},
+		messages: {
+			oldpwd: {
+				required: "请输入密码",
+				minlength: "密码长度不够",
+				maxlength: "密码长度不能超过16"
+			},
+			newpwd: {
+				required: "请输入密码",
+				minlength: "密码长度不够",
+				maxlength: "密码长度不能超过16"
+			},
+			renewpwd:{
+				required: "请输入密码",
+				equalTo:"两次输入密码不相同"
+			}
+		},
+		showErrors: function(errorMap, errorList) {
+			if (errorList && errorList.length > 0) {
+				$.each(errorList,
+						function(index, obj) {
+					var item = $(obj.element);
+					// 给输入框添加出错样式
+					item.closest(".control-group").addClass('error');
+					item.attr("title",obj.message);
+				});
+			} else {
+				var item = $(this.currentElements);
+				item.closest(".control-group").removeClass('error');
+				item.removeAttr("title");
+			}
+		},
+		submitHandler: function() {
+			var $form = $("#pwdform");
+			var $btn = $("#submit-btn");
+			if($btn.hasClass("disabled")) return;
+			var submitData = {
+					oldpwd: $("input[name='oldpwd']", $form).val(),
+					newpwd: $("input[name='newpwd']", $form).val(),
+					renewpwd: $("input[name='renewpwd']", $form).val()
+			};
+			$btn.addClass("disabled");
+			$.post('/business/admin/account/changepwd', submitData,function(data) {
+				$btn.removeClass("disabled");
+				if (data.error == "oldpwd") {
+					$("input[name='oldpwd']").focus();
+					alert("原密码不正确");
+				} else {
+					if (data.success == true) {
+						alert("密码修改成功");
+						top.window.location.href = "/business/admin/main";
+					} else {
+						alert("修改失败");
+					}
+				}
+			},"json");
+			return false;
+		}
+	});
+	$("#return-btn").click(function(e){
+		history.go(-1);
+	});
+});
+</script>
+</html>

@@ -1,0 +1,22 @@
+{
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+      "blanket": {
+          "pattern": "\//^((?!(node_modules|test)).)*$/" ,
+          "data-cover-flags": {
+              "debug": false
+          }
+      },
+      "travis-cov": {
+          "threshold": 80
+      }
+  },
+  "dependencies": {
+    "travis-cov": "*",
+    "blanket": "*",
+    "express": "3.2.4",
+    "ejs": "*"
+  }
+}

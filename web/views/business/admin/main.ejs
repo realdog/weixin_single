@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/resource/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/resource/css/admin/frame_v2.css" />
+    <script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/resource/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/resource/js/plugin/jquery.tipsy.js"></script>
+    <title>微信通平台</title>
+</head>
+
+<body class="showmenu">
+
+
+<img class="bg" src="/resource/image/admin/v2/bg.jpg" />
+
+<div class="left">
+    <div id="site-logo"></div>
+    <p class="intro">“维信通”平台是针对微信公众号提供功能强大的、易于使用的、经济实惠的智能营销服务平台，它弥补了微信本身公众平台功能的不足，为使用者提供更为贴心的、且是核心需求的功能和服务。</p>
+    <div class="menu">
+        <ul></ul>
+    </div>
+    <div class="bt-toolbar">
+        <a href="javascript:;" class="backtomenu">
+            <div class="icon"></div>
+            <div>首页</div>
+        </a>
+        <a target="main" href="javascript:alert("敬请期待"); return false;" class="account">
+        <div class="icon"></div>
+        <div>账户</div>
+        </a>
+        <a target="main" href="./account/changepwd" class="setting">
+            <div class="icon"></div>
+            <div>设置</div>
+        </a>
+        <a href="./logout" class="logout">
+            <div class="icon"></div>
+            <div>退出</div>
+        </a>
+    </div>
+</div>
+<div id="menu-trigger" title="隐藏左侧面板"></div>
+<div class="spliter"></div>
+<div class="right">
+    <div class="main">
+        <div class="header fn-clear">
+            <table>
+                <tr>
+                    <td style="width: 65%;position: relative;display: block;">
+                        <img id="flower-logo" src="/resource/image/admin/v2/flower_logo.png" />
+                        <h2 class="gg">公告</h2>
+                        <div class="notice">
+                            <ul class="content" data-cur="1" data-dir="1">
+                                <li>平台新增功能，互联网接入服务上线啦，敬请大家使用！</li>
+                                <li>平台新上线一战到底模块，答题目类游戏，敬请大家使用！</li>
+                                <li>平台新上线会员卡二期，增加消费特权，功能更加强大！</li>
+                            </ul>
+                        </div>
+                        <div style="position: absolute;width: 100%;height: 100%;z-index: 100;top: 0px;left: 0px;"></div>
+                    </td>
+                    <td width="310px">
+                        <div class="top-toolbar">
+                            <a href="javascript:alert('敬请期待');return false;" target="main" class="chart">
+                                <img title="运营状况" alt="运营状况" src="/resource/image/admin/v2/chart.png" />
+                                <div>运营状况</div>
+                            </a>
+                            <a href="javascript:alert('敬请期待');return false;" target="main" class="battery">
+
+                                <img title="套餐剩余6天" alt="套餐剩余6天" src="/resource/image/admin/battery/battery_12.png" />
+                                <div>我的智能电力</div>
+                            </a>
+                            <a href="javascipt:;" class="userlogo">
+                                <img title="<%=username%>" alt="tianjinwe" src="/resource/image/admin/v2/user.png" />
+                                <div><%=username%></div>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="main-menu-list fn-clear">
+            <div class="main-menu menu-index" style="display:none">
+                <div class="thumb"></div>
+            </div>
+            <div id="yxtg" class="main-menu menu-yxtg">
+                <img class="bimg" title="该模块包含“优惠劵、大转盘、刮刮卡”等营销推广功能，用于建立各种有趣的推广活动，派发商品的优惠信息、日常促销等，增加粉丝粘性，提升客户二次到店的几率。" src="/resource/image/admin/v2/yxtg.png" />
+                <div class="thumb"></div>
+                <ul>
+                    <li><a href="./shoper/service-module" target="main">营销活动模块</a></li>
+                    <li><a href="./shoper/activitylist" target="main">我的推广活动</a></li>
+                </ul>
+                <div class="title">营销推广模块</div>
+            </div>
+            <div id="wgw" class="main-menu menu-wgw">
+                <img class="bimg" title="该模块为用户提供在微信公众号里建设一个官方网站的功能，通过几种不同风格的模板，将企业的信息用很优美的形式展现出来，告别以往回复1、回复2这种单调的信息展现形式。" src="/resource/image/admin/v2/wgw.png" />
+                <div class="thumb"></div>
+                <ul>
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">我的微官网</a></li>
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">每日访问统计</a></li>
+                </ul>
+                <div class="title">我的微官网</div>
+            </div>
+            <div id="whyk" class="main-menu menu-whyk">
+                <img class="bimg" title="该模块为用户提供会员卡的服务，用户通过设置会员卡优惠，快速的将微信粉丝转化为会员，并且得到粉丝的详细资料。" src="/resource/image/admin/v2/whyk.png" />
+                <div class="thumb"></div>
+                <ul>
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">会员卡设置</a></li>
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">会员管理</a></li>
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">消费管理</a></li>
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">数据统计</a></li>
+                </ul>
+                <div class="title">微会员卡</div>
+            </div>
+            <div id="wtg" class="main-menu menu-wtg">
+                <img class="bimg" title="该模块用于发起团购活动，您可以设置最低成团人数、团购优惠价、参团商品描述等，客户参与团购，如参与人数达到最低参团人数，就可以获得SN码，到店消费即享受团购价。" src="/resource/image/admin/v2/wtg.png" />
+                <div class="thumb"></div>
+                <ul>
+                    <li><a target="main" href="javascript:alert('敬请期待');return false;">微团购</a></li>
+                </ul>
+                <div class="title">微团购</div>
+            </div>
+            <div id="menu-znkf" class="main-menu menu-znkf">
+                <img class="bimg" title="该模块用于设置您的智能客服，享有您专有的问答库，您可以预先设置各种问题和答案，如客户提出相应问题，客服机器人即回复您设置好的相关答案。" src="/resource/image/admin/v2/znkf.png" />
+                <div class="thumb"></div>
+                <ul>
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">智能客服绑定</a></li>
+
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">专属客服调教</a></li>
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">单一回复客服设置</a></li>
+
+                </ul>
+                <div class="title">智能客服</div>
+            </div>
+            <div id="menu-sc" class="main-menu menu-sc">
+                <img class="bimg" title="该模块用于预先设置和管理您的单图文和多图文资料，用于设置自定义问题的答复。" src="/resource/image/admin/v2/sc.png" />
+                <div class="thumb"></div>
+                <ul>
+                    <li><a href="./content/articlelist" target="main">图文素材管理</a></li>
+                    <li><a href="./ai/question" target="main">自定义回复库</a></li>
+                </ul>
+                <div class="title">素材管理</div>
+            </div>
+            <div id="menu-hlwjr" class="main-menu menu-hlwjr">
+                <img class="bimg" title="该模块用于选择您需要的互联网接入服务，包括查询天气、股票、听歌等功能。" src="/resource/image/admin/v2/hlwjr.png" />
+                <div class="thumb"></div>
+                <ul>
+                    <li><a href="./netservice-setting" target="main">互联网接入服务</a></li>
+                </ul>
+                <div class="title">互联网接入服务</div>
+            </div>
+            <div id="menu-cz" class="main-menu menu-cz">
+                <img class="bimg" title="该模块用于您账户的充值、查询，了解相关产品价格等信息。" src="/resource/image/admin/v2/cztc.png" />
+                <div class="thumb"></div>
+                <ul>
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">我的账户</a></li>
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">我要充值</a></li>
+
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">充值套餐</a></li>
+
+                </ul>
+                <div class="title">充值套餐</div>
+            </div>
+            <div id="menu-ste" class="main-menu menu-yzdd">
+                <img class="bimg" title="该模块用于设置竞猜类答题游戏“一战到底”，您可以设置的您的赛季，并根据粉丝的答题榜单进行奖品派发，同时您可以利用战前阅读，进行您的品牌宣传。" src="/resource/image/admin/v2/yzdd.png" />
+                <div class="thumb"></div>
+                <ul>
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">一战到底管理</a></li>
+                    <li><a href="javascript:alert('敬请期待');return false;" target="main">题库管理</a></li>
+                </ul>
+                <div class="title">一战到底</div>
+            </div>
+
+            <div id="menu-ste" class="main-menu menu-yzdd">
+                <img class="bimg" title="系统设置" src="/resource/image/admin/v2/xtsz.png" />
+                <div class="thumb"></div>
+                <ul>
+					<li><a href="./sys/setwel" target="main">设置欢迎信息</a></li>
+					<li><a href="./sys/setmsg" target="main">设置默认回复信息</a></li>
+					<li><a href="./sys/mlist" target="main">发送信息记录</a></li>
+                </ul>
+                <div class="title">系统设置</div>
+            </div>
+
+
+        </div>
+        <div class="frame-wrapper">
+            <iframe frameborder="0" id="main" name="main" src="" ></iframe>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    $(function(){
+        $("#menu-trigger").click(function(){
+            var $body = $("body");
+            if($body.hasClass("hidemenu")){
+                $body.removeClass("hidemenu");
+                $body.addClass("showmenu");
+                $(this).attr("title","隐藏左侧面板");
+            } else{
+                $body.removeClass("showmenu");
+                $body.addClass("hidemenu");
+                $(this).attr("title","展开左侧面板");
+            }
+        });
+        //var itemWidth = ($(".main-menu-list").width() - 4*20)/4;
+        //$(".main-menu").width(itemWidth);
+        $(".main-menu").click(function(){
+            var $menu = $(this);
+            $(".main-menu-list .active").removeClass("active");
+            window.activeMenu = $menu;
+            $menu.addClass("active");
+            if($menu.hasClass('menu-index')){
+                //显示首页
+                $(".left .menu ul").empty();
+                $(".right .main").removeClass("showpage");
+                $(".intro").show();
+                $(".menu-index").hide();
+                return ;
+            }
+            $(".right .main").addClass("showpage");
+            $(".left .menu ul").html($menu.find("ul").html());
+            var $firstMenu = $(".left .menu ul li").eq(0);
+            $firstMenu.addClass("selected");
+            $(".right iframe").attr("src",$firstMenu.find("a").attr("href"));
+            $(".intro").hide();
+            $(".menu-index").show();
+        });
+        $(".main-menu").hover(function(){
+            if($(".right .main").hasClass("showpage")){
+                if($(this).attr("id") != window.activeMenu.attr("id")){
+                    window.activeMenu.removeClass("active");
+                }
+            }
+        },function(){
+            if($(".right .main").hasClass("showpage")){
+                window.activeMenu.addClass("active");
+            }
+        });
+        $(".left .menu").delegate("li","click",function(){
+            $(".left .menu ul li.selected").removeClass("selected");
+            $(this).addClass("selected");
+        });
+        $(".backtomenu").click(function(){
+            $(".left .menu ul").empty();
+            $(".right .main").removeClass("showpage");
+            $(".intro").show();
+            $(".menu-index").hide();
+        });
+        $("a[target='main']").click(function(){
+            $(".right .main").addClass("showpage");
+            $(".menu-index").show();
+        });
+        // 模块tooltip提示
+        $(".right .bimg").tipsy({delayIn: 300, delayOut: 300, gravity: "s"});
+        /*var ts = "20130517143319";
+         // 给每个连接后面添加时间戳，防止浏览器下iframe缓存不刷新的问题
+         $("a[target='main']").each(function(index,a){
+         $a = $(a);
+         if($a.attr("href").indexOf("?") != -1){
+         $a.attr("href",$a.attr("href") + "&ts=" + ts);
+         } else{
+         $a.attr("href",$a.attr("href") + "?ts=" + ts);
+         }
+         });*/
+        function getUrlParam(name) {
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+            var r = window.location.search.substr(1).match(reg);  //匹配目标参数
+            if (r!=null) return unescape(r[2]); return null; //返回参数值
+        }
+        $(document).ready(function() {
+            var targetParam = getUrlParam("target");
+            var $href = $(".main-menu-list ul>li>a[href*='"+ targetParam + "']");
+            if ($href.length > 0) {
+                $(".right .main").addClass("showpage");
+                $(".left .menu ul").html($href.closest("ul").html());
+                $(".left .menu ul li:eq(" + $href.closest("li").index() + ")").addClass("selected");
+                $(".right iframe").attr("src",$href.attr("href"));
+                $(".intro").hide();
+            }
+        });
+        // 动态计算iframe高度
+        $(".main iframe").height($(".right").height() - 95);
+    });
+</script>
+<div id="article_choice_dialog" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>选择图文消息</h3>
+    </div>
+
+    <div class="modal-body">
+        <iframe style="width:760px;height:380px;" id="article_frame" name="article_frame" frameborder="no" border="0" ></iframe>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-primary" id="select">确定</a>
+        <a href="#" class="btn" id="cancel">取消</a>
+    </div>
+</div>
+</body>
+<script>
+    $(function(){
+        //公告代码
+        var timer = setInterval(function(){
+            var $cont = $(".notice .content"),
+                    count = $cont.find("li").length,
+                    cur = $cont.attr("data-cur"),
+                    dist = "-=" + $cont.find("li").eq(cur-1).outerHeight();
+            dir = $cont.attr("data-dir");
+            if(count <= 1){//公告少于2条时清除定时器
+                clearInterval(timer);
+                return ;
+            }
+            if(dir == 1){//正方向
+                if(cur == count){//反方向处理
+                    cur--;
+                    dist = "+=" + $cont.find("li").eq(cur-1).outerHeight();
+                    dir = 0;
+                }else{
+                    cur++;
+                }
+                $cont.attr("data-cur" , cur);
+            }else{//负方向
+                if(cur == 1){//反方向处理
+                    cur++;
+                    dir = 1;
+                }else{
+                    cur--;
+                    dist = "+=" + $cont.find("li").eq(cur-1).outerHeight();
+                }
+            }
+            $cont.attr("data-cur" , cur);
+            $cont.attr("data-dir" , dir);
+            $cont.animate({"margin-top":dist},1000);
+        } , 8000);
+    });
+</script>
+<script>
+    function showArticleChoice(){
+        $("#article_choice_dialog").modal("show");
+        $("#article_frame").attr("src" , "/admin/content/article?action=popup_list");
+    }
+
+    function showAddArticle(){
+        $("#article_choice_dialog").modal("toggle");
+        $("iframe[name=main]").attr("src","/admin/content/article_detail.jsp");
+    }
+
+    //处理图文选择
+    $(function(){
+        $("#article_choice_dialog #select").click(function(){
+            var resId = window.frames["article_frame"].getSelected();
+            if(resId == null){
+                alert("请至少选择一个图文");
+            }else{
+                $("#article_choice_dialog").modal("toggle");
+                window.frames["main"].setSelectedArticle(resId);
+            }
+        });
+
+        $("#article_choice_dialog #cancel").click(function(){
+            $("#article_choice_dialog").modal("toggle");
+        });
+    })
+</script>
+<style>
+    #article_choice_dialog{
+        width: 800px;
+        margin-left: -380px;
+    }
+</style>
+</html>

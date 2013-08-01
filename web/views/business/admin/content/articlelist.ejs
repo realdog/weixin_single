@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="/resource/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/resource/css/admin/appmsg.css" />
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/resource/bootstrap/js/bootstrap.min.js"></script>
+<style>
+	body{
+		padding-bottom: 20px;
+	}
+	.pagination{
+		margin: 0 70px;
+		float: right;
+	}
+	#first_col{
+		display: inline-block; 
+		zoom: 1; 
+		*display: inline; 
+	}
+	#second_col{
+		margin-left: 15px;
+		display: inline-block; 
+		zoom: 1; 
+		*display: inline; 
+	}
+	.add-btn {
+		height: 90px;
+		margin: 0 18px;
+		color: #b5b5b5;
+		background: transparent url('/resource/image/admin/appmsg-icon.png') no-repeat 50% -242px;
+	}
+	.multi-access {
+		background-position: 50% -342px;
+	}
+	ul{
+		padding: 0;
+		margin: 0;
+	}
+	li{
+		list-style-type: none;
+	}
+	.sub-msg-item {
+		padding: 12px 14px;
+		overflow: hidden;
+		zoom: 1;
+		border-top: 1px solid #c6c6c6;
+	}
+	.thumb {
+		float: right;
+		font-size: 0;
+	}
+	.thumb .default-tip {
+		font-size: 16px;
+		color: #c0c0c0;
+		width: 70px;
+		line-height: 70px;
+		border: 1px solid #b2b8bd;
+	}
+	.thumb img {
+		width: 70px;
+		height: 70px;
+		border: 1px solid #b2b8bd;
+	}
+	.sub-msg-item .msg-t {
+		margin-left: 0;
+		margin-right: 85px;
+		margin-top: 0;
+		padding-left: 4px;
+		padding-top: 12px;
+		line-height: 24px;
+		max-height: 48px;
+		font-size: 14px;
+		overflow: hidden;
+	}
+</style>
+<title>图文素材管理页面</title>
+<script>
+$(function(){
+	//绑定删除事件
+	$(".del-btn").click(function(){
+			if(confirm("确定删除本图文?")){
+				var $delTarget = $(this);
+				$.post("./article?action=del",{rid:$(this).attr("data-rid")},function(result){
+					if(result.success){
+						$delTarget.closest(".msg-item-wrapper").remove();
+						$("#total_count").text(parseInt($("#total_count").text())-1);
+					}else{
+						if("1" == result.errorCode){
+							alert("此图文在问答回复中已经被关联，请先解除绑定。");
+						}else{
+							alert("删除失败!");
+						}
+						
+					}
+				},"json");
+			}
+	});
+	
+	//绑定编辑事件
+	$(".edit-btn").click(function(){
+		if($(this).attr("data-mul") == "true"){
+			location.href = "article-mul-detail?action=edit&rid="+$(this).attr("data-rid");
+		} else{
+			location.href = "article-detail?action=edit&rid="+$(this).attr("data-rid");
+		}
+	});
+});
+</script>
+</head>
+<body>
+	<div class="container">
+		<div class="containerBox">
+			<div class="boxHeader">
+				<h4>素材管理</h4>
+			</div>
+			<div class="content">
+				<h3 class="page-sub-hd">图文列表(共<span id="total_count"><%=recordCount%></span>/100个)</h3>
+				<div class="group page-nav">
+					
+
+
+<div class="pagination">
+  <ul>
+
+    <li class='disabled'><span>上一页</span></li><li class='active'><span>1</span></li>
+  </ul>
+  
+</div>
+					<div class="clr"></div>
+				</div>
+		   		<div class="page-bd">
+		   			<div class="tj msg-list">
+		   				<!-- 偶数内容 -->
+		   				<div id="first_col" class="b-dib vt msg-col">
+							<div id="addAppmsg" class="tc add-access">       
+								<a href="/business/admin/content/article-detail" class="dib vm add-btn">+单图文消息</a>         
+								<a href="/business/admin/content/article-mul-detail" class="dib vm add-btn multi-access">+多图文消息</a>
+					       </div>
+		   					
+		   						<%for(var i=0; i<data.length; i=i+2){%>	
+                                	<% if (data[i].type=="s") {%>
+				   					<div class="msg-item-wrapper">              
+					   							<div class="msg-item">				   											   						
+				   							<h4 class="msg-t"><%=data[i].type%><a href="/static/article/detail/2717" class="i-title" target="_blank" id="a<%=i%>"><%=data[i].jsondata.title %></a></h4>           
+				   							<p class="msg-meta"><span class="msg-date"><%=data[i].update_time%></span></p>
+											<div class="cover">
+												<p class="default-tip" style="display:none">封面图片</p>
+												<img src="<%=data[i].jsondata.coverurl %>" class="i-img" style="">
+											</div>
+											<p class="msg-text"></p>         
+										</div>
+		   								   
+										<div class="msg-opr">
+											<ul class="f0 msg-opr-list">
+												<li class="b-dib opr-item"><a data-mul="false"  class="block tc opr-btn edit-btn" href="javascript:void(0)" data-rid="<%=data[i].aid%>"><span class="th vm dib opr-icon edit-icon">编辑</span></a></li>           
+												<li class="b-dib opr-item"><a class="block tc opr-btn del-btn" href="javascript:void(0);" data-rid="<%=data[i].aid%>"><span class="th vm dib opr-icon del-icon">删除</span></a></li>         
+											</ul>       
+										</div>            
+									</div>
+									<% }else if (data[i].type=="m"){%>
+				   					<div class="msg-item-wrapper">              
+				   						<div class="msg-item multi-msg">
+					   						<div class="appmsgItem">  
+				   							<h4 class="msg-t"><a href="/static/article/detail/4590" class="i-title" target="_blank"><%=data[i].jsondata[0].title %></a></h4>           
+				   							<p class="msg-meta"><span class="msg-date"><%=data[i].update_time%></span></p>
+											<div class="cover">
+												<p class="default-tip" style="display:none">封面图片</p>
+												<img src="<%=data[i].jsondata[0].cover %>" class="i-img" style="">
+											</div>
+											<p class="msg-text"></p>         
+										</div>
+                                        <%for(var j=1; j<data[i].jsondata.length; j++){%>	
+                                            <div class="rel sub-msg-item appmsgItem">              
+                                                <span class="thumb">                 
+                                                <img src="<%=data[i].jsondata[j].cover%>" class="i-img" style="">
+                                                </span>       
+                                                <h4 class="msg-t">                 
+                                                 <a href="#" target="_blank" class="i-title"><%=data[i].jsondata[j].title%></a>                
+                                                 </h4>       
+                                            </div>
+                                            <%}%>
+			   							</div>
+                                        
+										<div class="msg-opr">
+											<ul class="f0 msg-opr-list">
+												<li class="b-dib opr-item"><a data-mul="true"  class="block tc opr-btn edit-btn" href="javascript:void(0)" data-rid="<%=data[i].aid%>"><span class="th vm dib opr-icon edit-icon">编辑</span></a></li>           
+												<li class="b-dib opr-item"><a class="block tc opr-btn del-btn" href="javascript:void(0);" data-rid="<%=data[i].aid%>"><span class="th vm dib opr-icon del-icon">删除</span></a></li>         
+											</ul>       
+										</div>            
+									</div>                               
+                                    <% }%>
+								<%}%>
+		   				</div>
+		   				<!-- 奇数内容 -->
+		   				<div id="second_col" class="b-dib vt msg-col">
+			   				
+			   					<%for(var i=1; i<data.length; i=i+2){%>	
+                                	<% if (data[i].type=="s") {%>
+				   					<div class="msg-item-wrapper">              
+					   							<div class="msg-item">				   											   						
+				   							<h4 class="msg-t"><%=data[i].type%><a href="/static/article/detail/2717" class="i-title" target="_blank" id="a<%=i%>"><%=data[i].jsondata.title %></a></h4>           
+				   							<p class="msg-meta"><span class="msg-date"><%=data[i].update_time%></span></p>
+											<div class="cover">
+												<p class="default-tip" style="display:none">封面图片</p>
+												<img src="<%=data[i].jsondata.coverurl %>" class="i-img" style="">
+											</div>
+											<p class="msg-text"></p>         
+										</div>
+		   								   
+										<div class="msg-opr">
+											<ul class="f0 msg-opr-list">
+												<li class="b-dib opr-item"><a data-mul="false"  class="block tc opr-btn edit-btn" href="javascript:void(0)" data-rid="<%=data[i].aid%>"><span class="th vm dib opr-icon edit-icon">编辑</span></a></li>           
+												<li class="b-dib opr-item"><a class="block tc opr-btn del-btn" href="javascript:void(0);" data-rid="<%=data[i].aid%>"><span class="th vm dib opr-icon del-icon">删除</span></a></li>         
+											</ul>       
+										</div>            
+									</div>
+									<% }else if (data[i].type=="m"){%>
+				   					<div class="msg-item-wrapper">              
+				   						<div class="msg-item multi-msg">
+					   						<div class="appmsgItem">  
+				   							<h4 class="msg-t"><a href="/static/article/detail/4590" class="i-title" target="_blank"><%=data[i].jsondata[0].title%></a></h4>           
+				   							<p class="msg-meta"><span class="msg-date"><%=data[i].update_time%></span></p>
+											<div class="cover">
+												<p class="default-tip" style="display:none">封面图片</p>
+												<img src="<%=data[i].jsondata[0].cover%>" class="i-img" style="">
+											</div>
+											<p class="msg-text"></p>         
+										</div>
+                                        <%for(var j=1; j<data[i].jsondata.length; j++){%>	
+                                            <div class="rel sub-msg-item appmsgItem">              
+                                                <span class="thumb">                 
+                                                <img src="<%=data[i].jsondata[j].cover%>" class="i-img" style="">
+                                                </span>       
+                                                <h4 class="msg-t">                 
+                                                 <a href="#" target="_blank" class="i-title"><%=data[i].jsondata[j].title%></a>                
+                                                 </h4>       
+                                            </div>
+                                            <%}%>
+			   							</div>
+                                        
+										<div class="msg-opr">
+											<ul class="f0 msg-opr-list">
+												<li class="b-dib opr-item"><a data-mul="true"  class="block tc opr-btn edit-btn" href="javascript:void(0)" data-rid="<%=data[i].aid%>"><span class="th vm dib opr-icon edit-icon">编辑</span></a></li>           
+												<li class="b-dib opr-item"><a class="block tc opr-btn del-btn" href="javascript:void(0);" data-rid="<%=data[i].aid%>"><span class="th vm dib opr-icon del-icon">删除</span></a></li>         
+											</ul>       
+										</div>            
+									</div>                               
+                                    <% }%>				   					
+	
+							<%}%>
+		   				</div>
+                      
+                        
+		   			</div>
+		   		</div>
+			</div>
+			<!-- 
+			<div class="sideBar">
+			   	<div class="menu">
+			   		<ul class="nav nav-list">
+					  <li class="active"><a href="/admin/content/article?action=list" target="main">图文消息(8)</a></li>
+					  <li><a href="/admin/content/voice?action=list" target="main">语音(120)</a></li>
+					  <li><a href="account/pay.jsp" target="main">视频(0)</a></li>
+					</ul>
+			   	</div>
+			</div>
+			 -->
+		   	<div class="clr" />
+	   	</div>
+   	</div>
+</body>
+</html>

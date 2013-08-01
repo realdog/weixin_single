@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<link rel="stylesheet" href="/resource/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/resource/css/admin/admin.css" />
+<script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="/resource/bootstrap/js/bootstrap.min.js"></script>
+<title>我的活动</title>
+
+</head>
+<body>
+	<div class="main-title">
+		<h3>发送信息记录管理</h3>
+	</div>
+<div class="pagination">
+<% include ../include/pagesupport.ejs%>
+</div>
+	<table class="table table-hover table-striped">
+		<thead>
+			<tr>
+				<th>姓名</th>
+				<th>信息类型</th>
+				<th>信息</th>
+				<th>日志时间</th>
+			</tr>
+		</thead>
+		<tbody>
+<%for(var i=0; i<data.length; i++){%>		
+			<tr>
+				<td><%=data[i].username%></td>
+				<td><%=data[i].msgtype%></td>
+				<td><%=data[i].msg%></td>
+				<td><%=data[i].logdate%></td>
+			</tr>
+<%}%>		
+
+		
+		</tbody>
+	</table>
+
+	
+
+
+<div class="pagination">
+<% include ../include/pagesupport.ejs%>
+</div>
+</body>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1,user-scalable=no,maximum-scale=1,initial-scale=1"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no"/>
+    <meta name="description" content="狗狗 微信营销"/>
+    <link rel="stylesheet" href="<%= resourceDomain %>/css/mobileweb/plugin/alertify/alertify.css" />
+    <link rel="stylesheet" href="<%= resourceDomain %>/css/mobileweb/plugin/alertify/alertify.bootstrap.css" />
+    <script type="text/javascript" src="<%= resourceDomain %>/javascript/mobileweb/plugin/alertify/alertify.min.js"></script>
+    <style>
+        .cover{
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .cover img{
+            width: 100%;
+        }
+        #outer-cont {
+            position: absolute;
+            width: 100%;
+            top: 20px;
+            /* -moz-transform: rotate(-5deg);
+            -webkit-transform: rotate(-5deg);
+            -o-transform: rotate(-5deg);
+            -ms-transform: rotate(-5deg);
+            transform: rotate(-5deg); */
+        }
+        #inner-cont {
+            position: absolute;
+            width: 100%;
+            top: 90px;
+            /* -moz-transform: rotate(-5deg);
+            -webkit-transform: rotate(-5deg);
+            -o-transform: rotate(-5deg);
+            -ms-transform: rotate(-5deg);
+            transform: rotate(-5deg); */
+        }
+        #outer {
+            width : 300px;
+            max-width: 300px;
+            height: 300px;
+            margin: 0 auto;
+        }
+        #inner {
+            width : 112px;
+            max-width: 112px;
+            height: 142px;
+            margin: 0 auto;
+            cursor: pointer;
+        }
+        #outer img,#inner img{
+            display: block;
+            margin: 0 auto;
+        }
+        .content{
+            margin-top: 150px;
+            padding: 0 15px;
+        }
+        .content .desc{
+            font-weight: bold;
+            border-bottom: 1px dashed #000;
+            padding: 12px 0px;
+        }
+        .loading-mask{
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            background: rgba(0,0,0,0.6);
+            z-index: 100;
+            left: 0px;
+            top: 0px;
+        }
+    </style>
+    <script type="text/javascript">
+        Alertify.dialog.labels.ok = "确定";
+        function loading(canvas,options){
+            this.canvas = canvas;
+            if(options){
+                this.radius = options.radius||12;
+                this.circleLineWidth = options.circleLineWidth||4;
+                this.circleColor = options.circleColor||'lightgray';
+                this.moveArcColor = options.moveArcColor||'gray';
+            }else{
+                this.radius = 12;
+                this.circelLineWidth = 4;
+                this.circleColor = 'lightgray';
+                this.moveArcColor = 'gray';
+            }
+        }
+        loading.prototype = {
+            show:function (){
+                var canvas = this.canvas;
+                if(!canvas.getContext)return;
+                if(canvas.__loading)return;
+                canvas.__loading = this;
+                var ctx = canvas.getContext('2d');
+                var radius = this.radius;
+                var me = this;
+                var rotatorAngle = Math.PI*1.5;
+                var step = Math.PI/6;
+                canvas.loadingInterval = setInterval(function(){
+                    ctx.clearRect(0,0,canvas.width,canvas.height);
+                    var lineWidth = me.circleLineWidth;
+                    var center = {x:canvas.width/2,y:canvas.height/2};
+                    ctx.beginPath();
+                    ctx.lineWidth = lineWidth;
+                    ctx.strokeStyle = me.circleColor;
+                    ctx.arc(center.x,center.y+20,radius,0,Math.PI*2);
+                    ctx.closePath();
+                    ctx.stroke();
+                    //在圆圈上面画小圆
+                    ctx.beginPath();
+                    ctx.strokeStyle = me.moveArcColor;
+                    ctx.arc(center.x,center.y+20,radius,rotatorAngle,rotatorAngle+Math.PI*.45);
+                    ctx.stroke();
+                    rotatorAngle+=step;
+                },100);
+            },
+            hide:function(){
+                var canvas = this.canvas;
+                canvas.__loading = false;
+                if(canvas.loadingInterval){
+                    window.clearInterval(canvas.loadingInterval);
+                }
+                var ctx = canvas.getContext('2d');
+                if(ctx)ctx.clearRect(0,0,canvas.width,canvas.height);
+            }
+        };
+    </script>
+    <title>幸运大转盘抽奖页面</title>
+</head>
+
+<body data-role="page" data-aid="905">
+<div class="loading-mask">
+    <div style="position: absolute;left: 50%; margin-left: -150px;text-align: center;">
+        <canvas id="loading" style="width: 300px;height: 150px;">loading</canvas>
+        <div style="color: white;font-size: 20px;">正在努力加载中...</div>
+    </div>
+</div>
+<script type="text/javascript">
+    var loadingObj = new loading(document.getElementById('loading'),{radius:20,circleLineWidth:8});
+    loadingObj.show();
+</script>
+<div class="cover">
+    <img src="<%= resourceDomain %>/images/mobileweb/gaming/rotary/mobile_bg1.jpg" />
+</div>
+<div id="outer-cont">
+    <div id="outer"><img src="<%= resourceDomain %>/images/mobileweb/gaming/rotary/pan-1.png"/></div>
+</div>
+<div id="inner-cont">
+    <div id="inner"><img src="<%= resourceDomain %>/images/mobileweb/gaming/rotary/pan-2.png"/></div>
+</div>
+<div class="content">
+    <a href="/mobileweb/gaming/rotary/showresult?a=<%= a %>&u=<%= u %>&c=<%= code %>" id="opendialog" style="display: none;" data-rel="dialog"></a>
+    <p class="desc">兑奖说明<span style="color: red;">（亲，中奖后请务必输入您的手机号或牢记您的SN码，否则可能无法领奖喔！）</span></p>
+
+    <p>一等奖：<%= prize.prize1  %>。奖品数量：<%= prize.amount1  %></p>
+    <p>一等奖：<%= prize.prize2  %>。奖品数量：<%= prize.amount3  %></p>
+    <p>一等奖：<%= prize.prize3  %>。奖品数量：<%= prize.amount2  %></p>
+    <p>请点击进入幸运大转盘活动页面</p>
+</div>
+<div style="clear:both;"></div>
+
+
+
+
+
+
+
+<p class="page-url">
+    <a href="<%= provider.url %>" target="_blank" class="page-url-link">此功能由"<%= provider.name %>"平台提供</a>
+</p>
+
+
+
+
+</body>
+<link rel="stylesheet" href="<%= resourceDomain %>/css/mobileweb/common.css" />
+<link rel="stylesheet" href="<%= resourceDomain %>/css/mobileweb/jqm/jquery.mobile-1.2.0.min.css" />
+<script type="text/javascript" src="<%= resourceDomain %>/javascript/mobileweb/jquery/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="<%= resourceDomain %>/javascript/mobileweb/jqm/jquery.mobile-1.2.0.min.js"></script>
+<script type="text/javascript">
+    $(function(){
+        window.requestAnimFrame = (function(){
+            return  window.requestAnimationFrame       ||
+                    window.webkitRequestAnimationFrame ||
+                    window.mozRequestAnimationFrame    ||
+                    window.oRequestAnimationFrame      ||
+                    window.msRequestAnimationFrame     ||
+                    function(callback){
+                        window.setTimeout(callback, 20);
+                    };
+        })();
+
+        var totalDeg = 360 * 3 + 0;//总距离,两个部分，第一部分360*10为至少转多少圈，第二部分15是最终要停住的位置(单位都是度)
+        var steps = [];//步值
+        // 不中奖的位置
+        var lostDeg = [36,66,96,156,186,216,276,306,336];
+        // 中奖的位置
+        var prizeDeg = [6,126,246];
+        // 奖品
+        var prize,sncode = "1";
+        var count = 0;
+        var now = 0;
+        var a = 0.02;//减速度
+        var outter, inner, timer, running = false;
+        function countSteps() {
+            var t = Math.sqrt(2 * totalDeg / a);
+            var v = a * t;
+            for(var i = 0; i < t; i++) {
+                steps.push((2*v*i-a*i*i)/2);
+            }
+            steps.push(totalDeg);
+        }
+        function step() {
+            outter.style.webkitTransform = 'rotate(' + steps[now++] + 'deg)';
+            outter.style.MozTransform = 'rotate(' + steps[now++] + 'deg)';
+            //console.log(steps[now]);
+            if(now < steps.length) {
+                requestAnimFrame(step);
+            } else{
+                setTimeout(function(){
+                    if(prize != null){
+                        $('#opendialog').click();
+                    } else{
+                        Alertify.dialog.alert("谢谢您的参与，下次再接再厉");
+                    }
+                    running = false;
+                },200);
+            }
+        }
+
+        // 不输入deg则默认抽不中奖
+        function start(deg){
+            deg = deg || lostDeg[parseInt(lostDeg.length*Math.random())];
+            running = true;
+            clearInterval(timer);
+            totalDeg = 360 * 5 + deg;
+            steps = [];
+            now = 0;
+            countSteps();
+            requestAnimFrame(step);
+        }
+        window.start = start;
+        outter = document.getElementById('outer');
+        inner = document.getElementById('inner');
+        i = 10;
+        $("#inner").click(function(){
+            if(running) return;
+            //if(count >= 3){Alertify.dialog.alert("您已经抽了3次奖。");return;}
+            //if(prize != null){Alertify.dialog.alert("亲，你不能再参加本次活动了喔！下次再来吧~");return;}
+            running = true;
+            $.ajax({
+                url : "/mobileweb/gaming/rotary/check",
+                dataType : "json",
+                data : {c:'<%= code %>',u:<%= u %>, a:<%= a %>},
+                beforeSend: function(){
+                    timer = setInterval(function(){
+
+                    },5);
+                },
+                success : function(data){
+                    if (data.err) {
+                        Alertify.dialog.alert(data.err.message);
+                        clearInterval(timer);
+                        running = false;
+                        return
+                    } else  if(data.success){
+                        prize = data.prizetype;
+                        sncode = data.sn;
+                        start(prizeDeg[data.prizetype - 1]);
+                    } else{
+                        prize = null;
+                        start();
+                    }
+                },
+                error : function(){
+                    prize = null;
+                    start();
+                },
+                timeout : 4000
+            });
+        });
+        $("#showresult").live('pageinit', function (event) {
+            $("#sncode").text(sncode);
+            var type = "";
+            if(prize == 1){
+                type = "一等奖";
+            } else if(prize == 2){
+                type = "二等奖";
+            } else if(prize == 3){
+                type = "三等奖";
+            }
+            $("#prizetype").text(type);
+
+            $("#save-btn").bind("click",function(){
+                var $btn = $(this);
+                var tel = $("#tel").val();
+                if($btn.parent().hasClass("ui-disabled")) return;
+                if(tel == ''){
+                    $("#inputTip").html("<font color='red'>请输入手机号码:</font>");
+                    return;
+                }
+                var regu =/^[1][0-9]{10}$/;
+                var re = new RegExp(regu);
+                if(!re.test(tel)){
+                    $("#inputTip").html("<font color='red'>请输入正确手机号码:</font>");
+                    return;
+                }
+                var submitData = {
+                    tel:tel,
+                    sncode: sncode,
+                    c:'<%= code %>',
+                    u:<%= u %>,
+                    a:<%= a %>
+                };
+                $btn.parent().addClass("ui-disabled");
+                $.post('/mobileweb/gaming/rotary/setmobile?a=<%= a %>&u=<%= u %>&c=<%= code %>', submitData,function(data) {
+                    if(data.success == true){
+                        Alertify.dialog.alert("提交成功，谢谢您的参与");
+                        $("#showresult").dialog('close');
+                        return;
+                    } else{
+                        Alertify.dialog.alert("请记好您的获奖SN代码");
+                        $("#showresult").dialog('close');
+                        $btn.parent().removeClass("ui-disabled");
+                    }
+                },"json");
+            });
+        });
+        loadingObj.hide();
+        $(".loading-mask").remove();
+    });
+</script>
+
+</html>

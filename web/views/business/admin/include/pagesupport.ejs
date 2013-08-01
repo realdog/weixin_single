@@ -1,0 +1,44 @@
+<ul>
+	<li><a href="<%=href%>page=1">首页</a></li>
+<%if (page=="1") {%>
+    <li class='disabled'><span>上一页</span></li>
+<%}else{%>
+	<li><a href="<%=href%>page=<%=parseInt(page)-1%>">上一页</a></li>
+<%}%>
+<%if (page>5) {
+	if (parseInt(page)+5<maxpage) {
+		for(var p=parseInt(page)-4; p<=parseInt(page)+5; p++){
+%>
+			<li <%if (page==p) {%> class="active" <%}%>><a href="<%=href%>page=<%=p%>" class="aa"><%=p%></a></li>
+<%
+		}
+	}else {
+		for (var p=maxpage-9;p<=maxpage;p++){
+%>
+			<li <%if (page==p) {%> class="active" <%}%>><a href="<%=href%>page=<%=p%>" class="aa"><%=p%></a></li>
+<%	
+		}
+	}	
+}else{
+	if (maxpage>10) {
+		for (p=1;p<=10;p++){
+%>
+			<li <%if (page==p) {%> class="active" <%}%>><a href="<%=href%>page=<%=p%>" class="aa"><%=p%></a></li>
+<%
+		}
+	}else {
+		for(var p=1; p<=maxpage; p++){
+%>
+			<li <%if (page==p) {%> class="active" <%}%>><a href="<%=href%>page=<%=p%>" class="aa"><%=p%></a></li>
+<%
+		}
+	}
+}
+%>
+<%if (page==maxpage) {%>
+    <li class='disabled'><span>下一页</span></li>
+<%}else{%>
+	<li><a href="<%=href%>page=<%=parseInt(page)+1%>">下一页</a></li>
+<%}%>
+	<li><a href="<%=href%>page=<%=maxpage%>">尾页</a></li>
+</ul>
