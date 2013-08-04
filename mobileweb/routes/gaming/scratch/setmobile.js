@@ -19,26 +19,34 @@ exports.run = function(req, res, next){
                         } catch (e) {
                             return _errResponse(req, res, e, connection);
                         }
-                        if((!!req.body.sncode) && (!!req.body.tel)) {
-                            var tel = xss(req.body.tel);
-                            var sncode = xss(req.body.sncode);
 
-                            activity.setSNTableData(connection, {user_mobile:tel}, req.u, sncode, req.a, function(err, result){
-                                connection.end();
-                                if (!!err) {
-                                    return _errResponse(req, res, err);
-                                } else {
-                                    res.json(200,{
-                                        success: true
-                                    })
-                                }
-                            });
+                        var str = req.u.toString() + req.a.toString() + results[0]["salt"].toString();
+                        var hash =crypto.createHash("md5");
+                        hash.update(str);
+                        var hashmsg = hash.digest('hex');
+                        var code = hashmsg.toString();
+                        if (code != req.c) {
+                            return _errResponse(req, res, new Error("code is " + code + " And req.c is" + req.c), connection);
                         } else {
-                            connection.end();
-                            return _errResponse(req,res , new Error("setMobile fail for wrong params"), undefined);
+                            if((!!req.body.sncode) && (!!req.body.tel)) {
+                                var tel = xss(req.body.tel);
+                                var sncode = xss(req.body.sncode);
+
+                                activity.setSNTableData(connection, {user_mobile:tel}, req.u, sncode, req.a, function(err, result){
+                                    connection.end();
+                                    if (!!err) {
+                                        return _errResponse(req, res, err);
+                                    } else {
+                                        res.json(200,{
+                                            success: true
+                                        })
+                                    }
+                                });
+                            } else {
+                                connection.end();
+                                return _errResponse(req,res , new Error("setMobile fail for wrong params"), undefined);
+                            }
                         }
-
-
                     } else {
                         connection.end();
                         if (results.length > 1) {

@@ -53,6 +53,7 @@ app.use('/weixin', wechat("fakeToken").text(function(message, req, res, next){
             if (typeof msg != "string") {
                 for (var __temp in msg) {
                     msg[__temp].url = req.local_domain + '/mobileweb'  + msg[__temp].url;
+                    // need change
                     msg[__temp].picUrl = req.resource_domain + '/business_web' + msg[__temp].picUrl.replace('./','');
                 }
             }

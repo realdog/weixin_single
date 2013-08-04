@@ -93,6 +93,13 @@ exports.run = function(req, res, next){
                                 }
                             });
                         }
+                    }  else {
+                        if (results.length > 1) {
+                            return _errResponse(req, res, new Error(" getDataFromIdentifierByCWA results length > 1"), connection);
+                        } else {
+                            return _errResponse(req, res, new Error(" getDataFromIdentifierByCWA results length < 1"), connection);
+                        }
+
                     }
                 }
             });

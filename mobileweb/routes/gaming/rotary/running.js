@@ -1,6 +1,6 @@
 var config = require("../../../config")[env];
-var crypto = require('crypto');
 var activity = require("../../../../proxy/mobileweb/" + config.proxy_type + '/index.js');
+var crypto = require('crypto');
 var _errResponse = require("../../../../utility/report").errResponseByHtml;
 exports.name = "running";
 

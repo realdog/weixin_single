@@ -11,7 +11,6 @@ var express = require('express')
     , url = require('url')
     , config = require('./weixin/config')[env]
     , http = require('http')
-    , wechat = require('wechat')
     , weixin = require('./weixin/dispatch')
     , report = require("./utility/report");
 resource = require('./mobileweb/init');
