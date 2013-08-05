@@ -8,7 +8,15 @@
 <script type="text/javascript" src="/resource/js/jquery-1.7.2.min.js"></script>
 <script type="text/javascript" src="/resource/bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
-	var aid = 4601;
+(function($){
+	$.getUrlParam = function(name)
+	{
+	var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+	var r = window.location.search.substr(1).match(reg);
+	if (r!=null) return unescape(r[2]); return null;
+	}
+})(jQuery);
+	var aid = $.getUrlParam('baid');
 	$(function(){
 		$("#checkcode-btn").click(function(){
 			var queryContent = $("#code-input").val();
@@ -18,9 +26,9 @@
 				return false;
 			}
 			if (queryType == 1) {
-				//window.location.href = "sncode-manage.jsp?aid=" + aid + "&sn=" + queryContent;
+				window.location.href = "sncode-manage?baid=" + aid + "&sncode=" + queryContent;
 			} else if (queryType == 2) {
-				//window.location.href = "sncode-manage.jsp?aid=" + aid + "&tel=" + queryContent;
+				
 			}
 		});
 		
@@ -65,8 +73,7 @@
 		<div class="control-group">
 		    <div class="controls">
 		    	<select class="span2" id="querytype">
-				  <option value="1">SN码查询</option>
-				  <option value="2">手机查询</option>
+				  <option value="1">SN码查询</option>				 
 				</select>
 		    	<input type="text" id="code-input" class="span3" />
 		    	<button id="checkcode-btn" class="btn btn-primary">查询</button>

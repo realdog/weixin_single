@@ -98,7 +98,7 @@ var a= function cloneAll(fromObj){
 
 
 //自动分页
-module.exports.autoPage = function(recordset, page, pagesize, url){
+module.exports._autoPage = function(recordset, page, pagesize, url){
 
     if(!page)page=1;
     if(page<1)page=1;
@@ -118,7 +118,7 @@ module.exports.autoPage = function(recordset, page, pagesize, url){
             href += url + '?';
         }
     }
-    reData = {
+    var reData = {
         page        : page,
         maxpage     : Math.ceil(recordset.length/pagesize),
         pagesize    : pagesize,
@@ -133,4 +133,87 @@ module.exports.autoPage = function(recordset, page, pagesize, url){
     reData.data = tmp;
     return reData;
 };
+
+
+var _query = function(connection, sql, obj, callback){
+
+    if (!!connection) {
+        connection.query(sql, obj, function(err, results){
+            callback(err, results);
+        });
+    }else {
+        pool.getConnection(function(err, connection) {
+            if (!!err) {
+                return callback(err);
+            } else {
+                var query = connection.query(sql, obj, function(err, results){
+                    connection.end();
+                    callback(err, results);
+                });
+                console.log(query.sql);
+            }
+        });
+    }
+};
+
+/**
+ * 自动分页
+ * @param maxsql     j查询纪录数sql count(*) as count
+ * @param pagesql    j查询语句
+ * @param obj        jsql参数
+ * @param page       j当前页数
+ * @param pagesize   j每页条数
+ * @param url        j当前url
+ * @returns {*}
+ */
+module.exports.autoPage = function(maxsql, pagesql, obj, page, pagesize, url, callback){
+
+    if(!page)page=1;
+    if(page<1)page=1;
+    if(!pagesize)pagesize=10;
+    if(pagesize<1)pagesize=10;
+    if(isNaN(page) || isNaN(pagesize)){
+        page = 1;
+        pagesize =10;
+    }
+    var href = '';
+    if(url.indexOf('page=')>-1){
+        href = url.split('page=')[0];
+    }else{
+        if(url.indexOf('?')>-1){
+            href += url + '&';
+        }else{
+            href += url + '?';
+        }
+    }
+
+    var returnData = {
+        success     : false,
+        err         : null,
+        page        : page,
+        maxpage     : 0,
+        pagesize    : pagesize,
+        data        : null,
+        href        : href
+    };
+
+    _query(null, maxsql, obj, function(err, result){
+        if(!!err){
+            returnData.err = err.message;
+            return callback(returnData);
+        }
+        returnData.maxpage = Math.ceil(result[0].count/pagesize);
+        pagesql += " limit " + (page-1)*pagesize + "," + pagesize;
+        _query(null, pagesql, obj, function(err, result){
+            if(!!err){
+                returnData.err = err.message;
+                return callback(returnData);
+            }
+            returnData.success = true;
+            returnData.data = result;
+            return callback(returnData);
+        });
+    });
+};
+
 

@@ -119,22 +119,16 @@ module.exports.addActivityPage = function(req, res){
 //营销推广模块-我的推广活动页面
 module.exports.activityListPage = function(req, res){
 
-    pool.getConnection(function(err, connection){
-        if(!!err){
-            connection.end();
-            res.render('business/admin/err',{err:err.message});
-            return;
-        };
-        var query = connection.query("select '"+req.session.loginInfo.wx_username+"' as wx_username, a.baid, a.aid, a.keyword, a.activity_name, DATE_FORMAT(a.start_date,'%Y-%m-%d %H:%i:%s') as start_date , DATE_FORMAT(a.end_date,'%Y-%m-%d %H:%i:%s') as end_date, UNIX_TIMESTAMP(a.start_date)*1000 as start_stamp, UNIX_TIMESTAMP(a.end_date)*1000 as end_stamp, a.status, a.is_stop, b.activity_name as activity_type from biz_activity a, activity b where a.wuid = ? and a.status > -1 and a.aid = b.aid ", [req.session.loginInfo.wuid], function(err, result){
-            connection.end();
-            if(!!err){
-                res.render('business/admin/err',{err:err.message});
-                return;
+        var sql = "select '"+req.session.loginInfo.wx_username+"' as wx_username, a.baid, a.aid, a.keyword, a.activity_name, DATE_FORMAT(a.start_date,'%Y-%m-%d %H:%i:%s') as start_date , DATE_FORMAT(a.end_date,'%Y-%m-%d %H:%i:%s') as end_date, UNIX_TIMESTAMP(a.start_date)*1000 as start_stamp, UNIX_TIMESTAMP(a.end_date)*1000 as end_stamp, a.status, a.is_stop, b.activity_name as activity_type from biz_activity a, activity b where a.wuid = ? and a.status > -1 and a.aid = b.aid order by a.baid desc ";
+        var maxsql = "select count(*) as count from biz_activity a, activity b where a.wuid = ? and a.status > -1 and a.aid = b.aid ";
+
+        ZYF.autoPage(maxsql, sql, [req.session.loginInfo.wuid], req.query.page, req.query.pagesize, req.originalUrl, function(returnData){
+            if(returnData.success){
+                res.render('business/admin/shoper/activitylist', returnData);
+            }else{
+                res.render('business/admin/err',returnData.err);
             }
-            //console.log(ZYF.autoPage(result, req.query.page, 3));
-            res.render('business/admin/shoper/activitylist',ZYF.autoPage(result, req.query.page, req.query.pagesize, req.originalUrl));
         });
-    });
 };
 
 
@@ -293,8 +287,8 @@ module.exports.snList = function(req, res){
             }
 
             var query = connection.query("SELECT flag,count(*) as sum FROM biz_sn where baid = ? group by flag order by flag", [baid], function(err, result){
+                connection.end();
                 if(!!err){
-                    connection.end();
                     res.render('business/admin/err',{err:err.message});
                     return;
                 }
@@ -310,24 +304,41 @@ module.exports.snList = function(req, res){
                         getted = result[i].sum;
                     }
                 }
+
                 if(req.query.sncode){
-                    var strSql = "select * from biz_sn where baid = ?  and sn = '" + xss(req.query.sncode||0) + "'";
+                    var sql = "select * from biz_sn where baid = ?  and sn = '" + xss(req.query.sncode) + "' order by sid";
+                    var maxsql = "select count(*) as count from biz_sn where baid = ?  and sn = '" + xss(req.query.sncode) + "' order by sid";
                 }else{
-                    var strSql = "select * from biz_sn where baid = ? ";
+                    var sql = "select * from biz_sn where baid = ? order by sid";
+                    var maxsql = "select count(*) as count from biz_sn where baid = ? order by sid";
                 }
-                var query = connection.query(strSql, [baid], function(err, result){
+
+                ZYF.autoPage(maxsql, sql, baid, req.query.page, req.query.pagesize, req.originalUrl, function(returnData){
+                    if(returnData.success){
+                        returnData.posted = posted;
+                        returnData.getted = getted;
+                        returnData.sum = nouse + getted + posted;
+                        res.render('business/admin/shoper/sncode-manage', returnData);
+                        console.log(returnData);
+                    }else{
+                        res.render('business/admin/err',returnData.err);
+                    }
+                });
+
+                /*var query = connection.query(strSql, [baid], function(err, result){
                     connection.end();
                     if(!!err){
                         res.render('business/admin/err',{err:err.message});
                         return;
                     }
-                    var returnData = ZYF.autoPage(result, req.query.page, req.query.pagesize, req.originalUrl);
+                    var returnData = ZYF._autoPage(result, req.query.page, req.query.pagesize, req.originalUrl);
                     returnData.posted = posted;
                     returnData.getted = getted;
                     returnData.sum = nouse + getted + posted;
 
                     res.render('business/admin/shoper/sncode-manage', returnData);
-                });
+                });*/
+
             });
         });
     });

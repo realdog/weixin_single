@@ -228,3 +228,24 @@ var _get = function (req,res){
     });
 }
 module.exports.root = _get;
+
+
+var _query = function(connection, sql, obj, callback){
+
+    if (!!connection) {
+        connection.query(sql, obj, function(err, results){
+            callback(err, results);
+        });
+    }else {
+        pool.getConnection(function(err, connection) {
+            if (!!err) {
+                return callback(err);
+            } else {
+                var query = connection.query(sql, obj, function(err, results){
+                    connection.end();
+                    callback(err, results);
+                });
+            }
+        });
+    }
+};
