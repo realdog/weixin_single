@@ -94,7 +94,7 @@ var _getDefaultMsg = function(connection, userid, cb) {
                     __temp[_temp].picUrl = results[_temp].picUrl;
                     __temp[_temp].content = results[_temp].content;
                     __temp[_temp].url = results[_temp].url.replace("u=0", "u=" + userid);
-                    __temp[_temp].desc = results[_temp].desc;
+                    __temp[_temp].description = results[_temp].desc;
                 }
                 return cb(undefined, __temp);
             } else {
@@ -169,7 +169,7 @@ var _getArticleById = function(connection, userid, articleid, cb) {
                     article[0].picUrl = data.coverurl;
                     article[0].content = data.maincontent;
                     article[0].url = data.source_url || "/reply/normal/showArticle?c=" + _random + "&a=" + results[0].aid + "&u=" + userid;
-                    article[0].desc = data.summary;
+                    article[0].description = data.summary;
                 } else if (results[0].type == "m") {
                     var ___temp;
                     for (___temp in data) {
@@ -178,7 +178,7 @@ var _getArticleById = function(connection, userid, articleid, cb) {
                         article[___temp].picUrl = data[___temp].cover;
                         article[___temp].content = data[___temp].content;
                         article[___temp].url = data[___temp].sourceurl || "/reply/normal/showArticle?c=" + ___temp + "&a=" + results[0].aid + "&u=" + userid;
-                        article[___temp].desc = "";
+                        article[___temp].description = "";
                     }
                 }
                 return cb(err, article);
@@ -234,7 +234,7 @@ var _getArticleFromDBByKeyword = function(userid, keyword, callback) {
                             returnData[0].picUrl = data.coverurl;
                             returnData[0].content = data.maincontent;
                             returnData[0].url = data.source_url || "/reply/normal/showArticle?c=" + _random + "&a=" + results[0].aid + "&u=" + userid;
-                            returnData[0].desc = data.summary;
+                            returnData[0].description = data.summary;
                         } else if (results[0].type == "m") {
                             var ___temp;
                             returnData = [];
@@ -244,7 +244,7 @@ var _getArticleFromDBByKeyword = function(userid, keyword, callback) {
                                 returnData[___temp].picUrl = data[___temp].cover;
                                 returnData[___temp].content = data[___temp].content;
                                 returnData[___temp].url = data[___temp].sourceurl || "/reply/normal/showArticle?c=" + ___temp + "&a=" + results[0].aid + "&u=" + userid;
-                                returnData[___temp].desc = "";
+                                returnData[___temp].description = "";
                             }
                         }
                         return callback(err, returnData);
@@ -272,7 +272,7 @@ var _getArticleFromDBByKeyword = function(userid, keyword, callback) {
                                     returnData[0].picUrl = data.coverurl;
                                     returnData[0].content = data.maincontent;
                                     returnData[0].url = data.source_url || "/reply/normal/showArticle?c=" + _random + "&a=" + results[0].aid + "&u=" + userid;
-                                    returnData[0].desc = data.summary;
+                                    returnData[0].description = data.summary;
                                 } else if (results[0].type == "m") {
                                     var ___temp;
                                     returnData = [];
@@ -282,7 +282,7 @@ var _getArticleFromDBByKeyword = function(userid, keyword, callback) {
                                         returnData[___temp].picUrl = data[___temp].cover;
                                         returnData[___temp].content = data[___temp].content;
                                         returnData[___temp].url = data[___temp].sourceurl || "/reply/normal/showArticle?c=" + ___temp + "&a=" + results[0].aid + "&u=" + userid;
-                                        returnData[___temp].desc = "";
+                                        returnData[___temp].description = "";
                                     }
                                 }
                                 callback(err, returnData);

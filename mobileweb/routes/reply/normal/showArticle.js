@@ -11,7 +11,7 @@ exports.run = function(req, res, next){
         picUrl  : '',
         content : '',
         url     : '',
-        desc    : ''
+        description    : ''
     };
 
     resource.pool.getConnection(function(err, connection){
@@ -38,13 +38,13 @@ exports.run = function(req, res, next){
                 reData.picUrl = jsondata.coverurl;
                 reData.content = jsondata.maincontent;
                 reData.url = jsondata.source_url;
-                reData.desc = jsondata.summary;
+                reData.description = jsondata.summary;
             }else if(result[0].type == "m"){
                 reData.title = jsondata[sid].title;
                 reData.picUrl = jsondata[sid].cover;
                 reData.content = jsondata[sid].content;
                 reData.url = jsondata[sid].sourceurl;
-                reData.desc = null;
+                reData.description = null;
             }else{
                 return  _errResponse(req, res, new Error("data error:" + JSON.stringify(result[0]))  , undefined);
             }
