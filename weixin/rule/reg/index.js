@@ -1,8 +1,6 @@
 var config = require('../../config')[env];
 var activity = require('../../../proxy/weixin/' + config.proxy_type + '/index.js');
 var user = require('../../../proxy/weixin/' + config.proxy_type + '/user.js');
-
-
 var _subscribe = function (userKey, callback) {
     resource.pool.getConnection(function(err, connection) {
         if (!err) {

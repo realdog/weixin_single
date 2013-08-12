@@ -215,6 +215,16 @@ module.exports.usermsglist = function(req, res){
             res.render('business/admin/err',{err:err.message});
             return;
         };
+        var sql = "SELECT  a.username, b.msgtype, b.msg, DATE_FORMAT(b.logdate,'%Y-%m-%d %H:%i:%s') as logdate FROM user a, user_send_log b where a.userkey = b.userkey and a.wuid = ? ";
+        var maxsql = "SELECT count(*) FROM user a, user_send_log b where a.userkey = b.userkey and a.wuid = ? ";
+        ZYF.autoPage(maxsql, sql, [req.session.loginInfo.wuid], req.query.page, req.query.pagesize, req.originalUrl, function(returnData){
+            if(returnData.success){
+                res.render('business/admin/sys/mlist', returnData);
+            }else{
+                res.render('business/admin/err',returnData.err);
+            }
+        });
+/*
         var sql = "select user.id as userid, user.username, user.address, user.phone, user.area, user_send_log.id as logid, user_send_log.msgtype, user_send_log.msg, DATE_FORMAT(user_send_log.logdate,'%Y-%m-%d %H:%i:%s') as logdate        from user        left join user_send_log        on user.id = user_send_log.userid        order by user.id , user_send_log.logdate";
         var query = connection.query(sql, [], function(err, result){
             connection.end();
@@ -224,7 +234,7 @@ module.exports.usermsglist = function(req, res){
             }
             //console.log(result);
             res.render('business/admin/sys/mlist',ZYF.autoPage(result, req.query.page, req.query.pagesize, req.originalUrl));
-        });
+        });*/
     });
 };
 

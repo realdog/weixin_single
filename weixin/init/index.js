@@ -37,7 +37,7 @@ module.exports.do = function(){
         console.log(arguments);
         console.log("load defaultMsg:" + ((!!err)? "fail" : "success"));
         that.defaultMsg = results.slice(0, results.length);
-        if (that.defaultMsg instanceof String) {
+        if (that.defaultMsg instanceof String || typeof(that.defaultMsg) == 'string') {
             that.defaultMsg_type = "String";
         } else if (that.defaultMsg instanceof Array) {
             that.defaultMsg_type = "Array";

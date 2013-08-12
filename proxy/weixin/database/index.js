@@ -168,7 +168,7 @@ var _getArticleById = function(connection, userid, articleid, cb) {
                     article[0].title = data.title;
                     article[0].picUrl = data.coverurl;
                     article[0].content = data.maincontent;
-                    article[0].url = data.source_url || "/reply/normal/showArticle?c=" + _random + "&a=" + results[0].aid + "&u=0";
+                    article[0].url = data.source_url || "/reply/normal/showArticle?c=" + _random + "&a=" + results[0].aid + "&u=" + userid;
                     article[0].desc = data.summary;
                 } else if (results[0].type == "m") {
                     var ___temp;
@@ -177,7 +177,7 @@ var _getArticleById = function(connection, userid, articleid, cb) {
                         article[___temp].title = data[___temp].title;
                         article[___temp].picUrl = data[___temp].cover;
                         article[___temp].content = data[___temp].content;
-                        article[___temp].url = data[___temp].sourceurl || "/reply/normal/showArticle?c=" + _random + "&a=" + results[0].aid + "&u=" + userid;
+                        article[___temp].url = data[___temp].sourceurl || "/reply/normal/showArticle?c=" + ___temp + "&a=" + results[0].aid + "&u=" + userid;
                         article[___temp].desc = "";
                     }
                 }
@@ -229,10 +229,11 @@ var _getArticleFromDBByKeyword = function(userid, keyword, callback) {
                         }
                         if (results[0].type == "s") {
                             returnData = [];
+							returnData[0] = {};
                             returnData[0].title = data.title;
                             returnData[0].picUrl = data.coverurl;
                             returnData[0].content = data.maincontent;
-                            returnData[0].url = data.source_url || "/reply/normal/showArticle?c=" + _random + "&a=" + results[0].aid + "&u=0";
+                            returnData[0].url = data.source_url || "/reply/normal/showArticle?c=" + _random + "&a=" + results[0].aid + "&u=" + userid;
                             returnData[0].desc = data.summary;
                         } else if (results[0].type == "m") {
                             var ___temp;
@@ -242,7 +243,7 @@ var _getArticleFromDBByKeyword = function(userid, keyword, callback) {
                                 returnData[___temp].title = data[___temp].title;
                                 returnData[___temp].picUrl = data[___temp].cover;
                                 returnData[___temp].content = data[___temp].content;
-                                returnData[___temp].url = data[___temp].sourceurl || "/reply/normal/showArticle?c=" + _random + "&a=" + results[0].aid + "&u=" + userid;
+                                returnData[___temp].url = data[___temp].sourceurl || "/reply/normal/showArticle?c=" + ___temp + "&a=" + results[0].aid + "&u=" + userid;
                                 returnData[___temp].desc = "";
                             }
                         }
@@ -266,10 +267,11 @@ var _getArticleFromDBByKeyword = function(userid, keyword, callback) {
                                 }
                                 if (results[0].type == "s") {
                                     returnData = [];
+									returnData[0] = {};
                                     returnData[0].title = data.title;
                                     returnData[0].picUrl = data.coverurl;
                                     returnData[0].content = data.maincontent;
-                                    returnData[0].url = data.source_url || "/reply/normal/showArticle?c=" + _random + "&a=" + results[0].aid + "&u=0";
+                                    returnData[0].url = data.source_url || "/reply/normal/showArticle?c=" + _random + "&a=" + results[0].aid + "&u=" + userid;
                                     returnData[0].desc = data.summary;
                                 } else if (results[0].type == "m") {
                                     var ___temp;
@@ -279,7 +281,7 @@ var _getArticleFromDBByKeyword = function(userid, keyword, callback) {
                                         returnData[___temp].title = data[___temp].title;
                                         returnData[___temp].picUrl = data[___temp].cover;
                                         returnData[___temp].content = data[___temp].content;
-                                        returnData[___temp].url = data[___temp].sourceurl || "/reply/normal/showArticle?c=" + _random + "&a=" + results[0].aid + "&u=" + userid;
+                                        returnData[___temp].url = data[___temp].sourceurl || "/reply/normal/showArticle?c=" + ___temp + "&a=" + results[0].aid + "&u=" + userid;
                                         returnData[___temp].desc = "";
                                     }
                                 }

@@ -35,10 +35,10 @@ module.exports.filterLogin = function(req, res, next){
             return;
         }
     }
-    //res.redirect('/');
+    res.redirect('/');
     //自动登陆
-    ZYO.setLogin(req, 1, 'linshi', '111111', '22222', 'sdfsdf', 're');
-    next();
+    //ZYO.setLogin(req, 1, 'linshi', '111111', '22222', 'sdfsdf', 're');
+    //next();
 };
 
 
