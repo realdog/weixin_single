@@ -12,7 +12,7 @@ var _subscribe = function (userKey, callback) {
                             if (!err) {
                                 if (results.affectedRows != 1) {
                                     connection.end();
-                                    callback(new Error("update too may recorders"));
+                                    callback(new Error("_subscribe:update too may recorders"));
                                 } else {
                                     activity.getWelcomMsg(connection, userid, function(err, results){
                                         connection.end();
